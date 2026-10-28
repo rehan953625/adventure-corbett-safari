@@ -520,7 +520,7 @@ function handleBookingEmail() {
 
   // 4. FormSubmit AJAX Payload (Serverless, Direct to adventuresafari120@gmail.com)
   var payload = {
-    _subject: '🐅 New Corbett Safari Booking Enquiry: ' + d.zone + ' (' + d.date + ')',
+    _subject: ' New Booking Enquiry: ' + d.name + '' + d.email + ' (' + d.date + ')',
     _template: 'table',
     _captcha: 'false',
     'Traveller Name': d.name,
