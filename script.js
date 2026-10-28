@@ -407,7 +407,7 @@ function showSuccessModal(summaryHtml, detailsHtml) {
 
   if (titleEl) titleEl.textContent = 'Thanks For Connecting Us!';
   if (badgeEl) badgeEl.style.display = 'inline-block';
-  if (textEl) textEl.innerHTML = summaryHtml || 'Your safari enquiry has been submitted successfully to our Ramnagar desk. Our team will verify slot availability and contact you shortly.';
+  if (textEl) textEl.innerHTML = summaryHtml || 'Your enquiry has been submitted successfully. Our team will  contact you shortly.';
 
   if (detailsEl) {
     if (detailsHtml) {
