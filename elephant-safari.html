@@ -1,15 +1,116 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#10271e"><title>Elephant Experience Near Corbett | Adventure Corbett Safari</title><meta name="description" content="Information about the locally described elephant experience, subject to legal permission and availability."><link rel="stylesheet" href="assets/css/style.css">
 <style>
-.page-hero.elephant-hero{position:relative;min-height:clamp(160px,53.85vw,700px);display:flex;align-items:center;background-image:url("assets/images/elephant-safari-1.webp");background-size:cover;background-position:center;background-repeat:no-repeat;overflow:hidden}
-.page-hero.elephant-hero .page-hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,24,17,.82),rgba(5,24,17,.42) 58%,rgba(5,24,17,.15));z-index:1}
-.page-hero.elephant-hero .page-hero-content{position:relative;z-index:2;width:100%;padding:60px 0}
-.elephant-photo-stack{display:flex;flex-direction:column;gap:18px;width:100%}
-.elephant-photo-stack .detail-image{display:block;width:100%;height:auto;max-height:340px;object-fit:cover;border-radius:12px}
-.elephant-guide{padding-top:60px;padding-bottom:60px}
-.elephant-guide .detail-copy{max-width:90%;line-height:1.8}
-.elephant-guide h3{margin-top:30px}.elephant-guide h4{margin-top:20px}
-@media(max-width:600px){.page-hero.elephant-hero{min-height:150px;background-position:center}.page-hero.elephant-hero .page-hero-overlay{background:linear-gradient(180deg,rgba(5,24,17,.48),rgba(5,24,17,.78))}.page-hero.elephant-hero .page-hero-content{padding:55px 20px}.page-hero.elephant-hero h1{font-size:clamp(34px,9vw,46px);line-height:1.12}.elephant-photo-stack .detail-image{max-height:260px}.elephant-guide{padding-top:35px;padding-bottom:35px}}
+/* =========================================================
+   ELEPHANT EXPERIENCE PAGE
+   Page-specific CSS. Shared site styles remain in style.css.
+   ========================================================= */
+
+/* 1. HERO / TOP BACKGROUND IMAGE */
+.page-hero.elephant-hero {
+  position: relative;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  background-image: url("assets/images/elephant-safari-1.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.page-hero.elephant-hero .page-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(5, 24, 17, 0.82),
+    rgba(5, 24, 17, 0.42) 58%,
+    rgba(5, 24, 17, 0.15)
+  );
+}
+
+.page-hero.elephant-hero .page-hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 40px 0;
+}
+
+/* 2. TWO PHOTOS BESIDE THE INTRODUCTION */
+.elephant-photo-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+}
+
+.elephant-photo-stack .detail-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* 3. LONG-FORM GUIDE BELOW THE ENQUIRY FORM */
+.elephant-guide {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.elephant-guide .detail-copy {
+  max-width: 90%;
+  line-height: 1.8;
+}
+
+.elephant-guide h3 {
+  margin-top: 30px;
+}
+
+.elephant-guide h4 {
+  margin-top: 20px;
+}
+
+/* 4. MOBILE LAYOUT */
+@media (max-width: 600px) {
+  .page-hero.elephant-hero {
+    min-height: 300px;
+    background-position: center;
+  }
+
+  .page-hero.elephant-hero .page-hero-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(5, 24, 17, 0.48),
+      rgba(5, 24, 17, 0.78)
+    );
+  }
+
+  .page-hero.elephant-hero .page-hero-content {
+    padding: 32px 20px;
+  }
+
+  .page-hero.elephant-hero h1 {
+    font-size: clamp(32px, 8vw, 42px);
+    line-height: 1.12;
+  }
+
+  .elephant-photo-stack .detail-image {
+    max-height: 240px;
+  }
+
+  .elephant-guide {
+    padding-top: 35px;
+    padding-bottom: 35px;
+  }
+
+  .elephant-guide .detail-copy {
+    max-width: 100%;
+  }
+}
 </style></head><body>
 <header class="site-header"><div class="header-inner">
 <a class="brand" href="index.html" aria-label="Adventure Corbett Safari home"></a>
