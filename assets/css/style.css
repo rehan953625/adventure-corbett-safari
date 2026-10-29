@@ -211,7 +211,7 @@
 /* JEEP SAFARI HERO BACKGROUND */
 .page-hero {
   position: relative;
-  min-height: clamp(360px, 53.85vw, 700px);
+  min-height: clamp(360px, 53.85vw, 300px);
   background-image: url('../images/jeep-tiger-safari.webp');
   background-size: cover;
   background-position: center center;
