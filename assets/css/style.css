@@ -30,6 +30,16 @@
 @media(max-width:760px){.page-hero{min-height:270px}.page-hero-content{padding-block:44px}.detail-section{grid-template-columns:1fr;padding-block:48px}.detail-image{height:320px}}
 @media(min-width:250px) and (max-width:359px){.page-hero{min-height:245px}.page-hero h1{font-size:30px}.detail-section{padding-block:36px}.detail-image{height:250px}.detail-price strong{font-size:15px}}
 
+@media (max-width: 600px) {
+  .hero-slider {
+    height: 480px;
+    min-height: 480px;
+  }
+}
+
+
+
+
 
 @media (max-width: 600px) {
   .hero-slider {
