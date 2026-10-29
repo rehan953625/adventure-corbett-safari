@@ -37,6 +37,17 @@
   }
 }
 
+.brand {
+  color: #ffffff !important;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.brand:hover,
+.brand:focus {
+  color: #ffffff !important;
+}
+
 
 
 
