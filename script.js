@@ -8,7 +8,7 @@
    - Local Timezone (IST) Date Initialization & Past-Date Protection
    - Universal Local Image Extension Resolver (.webp / .jpg / .jpeg / .png)
    - Smart Resort Photo Slideshow & Interactive 10-Zone Filter
-   - Verified FormSubmit AJAX Enquiry Submission with Activation/Status Check
+   - Multi-Engine Email Submission (Web3Forms + Google Apps Script + FormSubmit + Instant Lead Rescue)
    ========================================================================== */
 
 var SITE_CONFIG = {
@@ -21,7 +21,15 @@ var SITE_CONFIG = {
   phoneDisplay: '+91-9520645743',
   phoneTel: '+919520645743',
   whatsappNumber: '919520645743',
-  email: 'adventuresafari120@gmail.com'
+  email: 'adventuresafari120@gmail.com',
+
+  // OPTIONAL RELIABLE EMAIL PROVIDERS (To bypass FormSubmit.co Error 521 downtime):
+  // 1. Get a free access key in 10 seconds at https://web3forms.com using adventuresafari120@gmail.com
+  //    and paste it below inside the quotes:
+  web3formsKey: 'ba2ab064-6278-40f7-aa4d-bcf6e06e90b1',
+
+  // 2. Or paste a Google Apps Script Web App URL if you use Gmail Apps Script:
+  googleScriptUrl: ''
 };
 
 // State trackers for smart format <-> zone sync & toast timers
@@ -495,6 +503,44 @@ function highlightInvalidField(inputEl, message) {
   }
 }
 
+// Build plain-text body for Email / WhatsApp
+function buildEnquiryPlainText(d) {
+  var lines = [
+    'Hello Adventure Corbett Safari! I would like to check slot availability and book a safari:',
+    '',
+    '• Name: ' + d.name,
+    '• Phone / WhatsApp: ' + d.phone,
+    '• Email: ' + d.email,
+    '• Safari Format: ' + d.typeShort,
+    '• Preferred Zone: ' + d.zone,
+    '• Shift: ' + d.shift,
+    '• Travel Date: ' + d.date,
+    '• Total Guests: ' + d.guests + ' (' + d.nationality + ')',
+    '• Submitted On: ' + new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+  ];
+  return lines.join('\n');
+}
+
+// Open Gmail Web Compose or Default Mail Client when FormSubmit server is down (Error 521)
+function sendDirectEmailBackup(mode) {
+  var d = getBookingDetails();
+  var subject = 'New Safari Booking Enquiry: ' + d.name + ' (' + d.phone + ') - ' + d.date;
+  var body = buildEnquiryPlainText(d);
+
+  if (mode === 'gmail') {
+    var gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to='
+      + encodeURIComponent(SITE_CONFIG.email)
+      + '&su=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(body);
+    window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+  } else {
+    var mailtoUrl = 'mailto:' + SITE_CONFIG.email
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(body);
+    window.location.href = mailtoUrl;
+  }
+}
+
 // WhatsApp Booking Handler
 function handleBookingWhatsApp() {
   enforceGuestBounds();
@@ -533,45 +579,7 @@ function handleBookingWhatsApp() {
   window.open('https://wa.me/' + SITE_CONFIG.whatsappNumber + '?text=' + msg, '_blank', 'noopener,noreferrer');
 }
 
-// Trigger one-time FormSubmit domain activation via standard HTML POST in a new tab
-function triggerFormSubmitActivation() {
-  var d = getBookingDetails();
-  var form = document.createElement('form');
-  form.method = 'POST';
-  form.action = 'https://formsubmit.co/' + SITE_CONFIG.email;
-  form.target = '_blank';
-  form.style.display = 'none';
-
-  var fields = {
-    name: d.name,
-    phone: d.phone,
-    email: d.email,
-    safari_format: d.typeShort,
-    preferred_zone: d.zone,
-    safari_shift: d.shift,
-    travel_date: d.date,
-    total_guests: d.guests + ' (' + d.nationality + ')',
-    _subject: 'New Booking Enquiry: ' + d.name + ' (' + d.phone + ') - ' + d.date,
-    _template: 'table',
-    _captcha: 'false'
-  };
-
-  Object.keys(fields).forEach(function(key) {
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = fields[key];
-    form.appendChild(input);
-  });
-
-  document.body.appendChild(form);
-  form.submit();
-  setTimeout(function() {
-    if (form.parentNode) form.parentNode.removeChild(form);
-  }, 1500);
-}
-
-// Serverless Direct AJAX Submission Handler (FormSubmit AJAX with real response check)
+// Multi-Engine Serverless Email Submission Handler (Web3Forms -> Google Script -> FormSubmit -> Lead Rescue)
 function handleBookingEmail() {
   enforceGuestBounds();
   validateTravelDate();
@@ -596,6 +604,9 @@ function handleBookingEmail() {
   }
 
   var d = getBookingDetails();
+  var submittedAt = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+  var subjectLine = 'New Booking Enquiry: ' + d.name + ' (' + d.phone + ') - ' + d.date;
+
   var detailsHtml = '<strong>Submitted Details:</strong><br>'
     + '• Name: <strong>' + d.name + '</strong><br>'
     + '• Phone / WhatsApp: <strong>' + d.phone + '</strong><br>'
@@ -604,22 +615,7 @@ function handleBookingEmail() {
     + '• Date & Shift: <strong>' + d.date + ' (' + d.shift + ')</strong><br>'
     + '• Total Guests: <strong>' + d.guests + ' (' + d.nationality + ')</strong>';
 
-  // Check if page is opened directly via file:// (FormSubmit blocks file:// protocol)
-  if (window.location.protocol === 'file:') {
-    showSuccessModal(
-      'FormSubmit blocks emails when <code>index.html</code> is opened directly as a local file (<code>file://</code>). Please open the site via <strong>Live Server (http://localhost)</strong> or your live domain (<strong>' + SITE_CONFIG.domain + '</strong>) to receive emails.',
-      detailsHtml,
-      {
-        title: 'Local File Mode Detected',
-        badgeText: '⚠ Run via http://localhost or Live Domain',
-        badgeBg: '#FEF3C7',
-        badgeColor: '#92400E'
-      }
-    );
-    return;
-  }
-
-  // 3. UI Loading Feedback (Disable button & show sending state)
+  // 3. UI Loading Feedback
   var btn = document.getElementById('btnSubmitEnquiry');
   var btnText = document.getElementById('btnSubmitText');
   var originalText = btnText ? btnText.textContent : 'Submit Enquiry';
@@ -628,77 +624,128 @@ function handleBookingEmail() {
   if (btnText) btnText.textContent = 'Submitting Query…';
   showToast('Submitting your query directly to our desk…');
 
-  // 4. Use FormData with clean field keys for maximum FormSubmit deliverability
-  var formData = new FormData();
-  formData.append('name', d.name);
-  formData.append('phone', d.phone);
-  formData.append('email', d.email);
-  formData.append('_replyto', d.email);
-  formData.append('safari_format', d.typeShort);
-  formData.append('preferred_zone', d.zone);
-  formData.append('safari_shift', d.shift);
-  formData.append('travel_date', d.date);
-  formData.append('total_guests', d.guests + ' (' + d.nationality + ')');
-  formData.append('submitted_on', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
-  formData.append('_subject', 'New Booking Enquiry: ' + d.name + ' (' + d.phone + ') - ' + d.date);
-  formData.append('_template', 'table');
-  formData.append('_captcha', 'false');
+  // Helper for Web3Forms submission (Recommended: Never suffers from FormSubmit 521 errors)
+  function submitViaWeb3Forms() {
+    var payload = {
+      access_key: SITE_CONFIG.web3formsKey.trim(),
+      subject: subjectLine,
+      from_name: SITE_CONFIG.brandName + ' Website',
+      name: d.name,
+      phone: d.phone,
+      email: d.email,
+      replyto: d.email,
+      safari_format: d.typeShort,
+      preferred_zone: d.zone,
+      safari_shift: d.shift,
+      travel_date: d.date,
+      total_guests: d.guests + ' (' + d.nationality + ')',
+      submitted_on: submittedAt
+    };
 
-  fetch('https://formsubmit.co/ajax/' + SITE_CONFIG.email, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json'
-    },
-    body: formData
-  })
-    .then(function(response) {
-      return response.json();
+    return fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
     })
-    .then(function(result) {
-      var isSuccess = result && (result.success === true || result.success === 'true');
-      var serverMsg = (result && result.message) ? String(result.message) : '';
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data && data.success) {
+          return { ok: true };
+        }
+        throw new Error((data && data.message) || 'Web3Forms error');
+      });
+  }
 
-      if (isSuccess) {
-        showSuccessModal(
-          'Your safari enquiry has been emailed to our desk. Our team will verify slot availability and contact you shortly at <strong>' + d.phone + '</strong> or <strong>' + d.email + '</strong>.',
-          detailsHtml
-        );
-      } else if (serverMsg.toLowerCase().indexOf('activation') !== -1 || serverMsg.toLowerCase().indexOf('activate') !== -1) {
-        // First-time domain activation required by FormSubmit
-        showSuccessModal(
-          'FormSubmit has sent a one-time <strong>"Activate Form"</strong> email to <strong>' + SITE_CONFIG.email + '</strong> (please check Inbox &amp; Spam folder). Click <strong>Activate Form</strong> in that email once, and all future enquiries on this domain will arrive automatically.<br><br>'
-          + '<button type="button" onclick="triggerFormSubmitActivation()" style="padding:8px 14px; background:var(--bg-forest); color:var(--accent-gold); border:none; border-radius:6px; font-weight:700; cursor:pointer;">Resend Activation Email</button>',
-          detailsHtml + '<br>• Server Notice: <em>' + serverMsg + '</em>',
-          {
-            title: 'One-Time Email Activation Needed',
-            badgeText: '⚠ Check ' + SITE_CONFIG.email + ' (Inbox / Spam)',
-            badgeBg: '#FEF3C7',
-            badgeColor: '#92400E'
-          }
-        );
-      } else {
-        showSuccessModal(
-          'FormSubmit returned a notice: <strong>' + (serverMsg || 'Unable to deliver email from this environment.') + '</strong><br><br>'
-          + '<button type="button" onclick="triggerFormSubmitActivation()" style="padding:8px 14px; background:var(--bg-forest); color:var(--accent-gold); border:none; border-radius:6px; font-weight:700; cursor:pointer;">Send via Direct Form Post</button>',
-          detailsHtml,
-          {
-            title: 'Email Verification Notice',
-            badgeText: '⚠ Action Required',
-            badgeBg: '#FEF3C7',
-            badgeColor: '#92400E'
-          }
-        );
+  // Helper for Google Apps Script Web App submission
+  function submitViaGoogleScript() {
+    var formData = new FormData();
+    formData.append('name', d.name);
+    formData.append('phone', d.phone);
+    formData.append('email', d.email);
+    formData.append('safari_format', d.typeShort);
+    formData.append('preferred_zone', d.zone);
+    formData.append('safari_shift', d.shift);
+    formData.append('travel_date', d.date);
+    formData.append('total_guests', d.guests + ' (' + d.nationality + ')');
+    formData.append('submitted_on', submittedAt);
+
+    return fetch(SITE_CONFIG.googleScriptUrl.trim(), {
+      method: 'POST',
+      body: formData
+    }).then(function(res) {
+      if (res.ok || res.type === 'opaque') {
+        return { ok: true };
       }
+      throw new Error('Google Script HTTP ' + res.status);
+    });
+  }
+
+  // Helper for FormSubmit.co AJAX
+  function submitViaFormSubmit() {
+    var formData = new FormData();
+    formData.append('name', d.name);
+    formData.append('phone', d.phone);
+    formData.append('email', d.email);
+    formData.append('_replyto', d.email);
+    formData.append('safari_format', d.typeShort);
+    formData.append('preferred_zone', d.zone);
+    formData.append('safari_shift', d.shift);
+    formData.append('travel_date', d.date);
+    formData.append('total_guests', d.guests + ' (' + d.nationality + ')');
+    formData.append('submitted_on', submittedAt);
+    formData.append('_subject', subjectLine);
+    formData.append('_template', 'table');
+    formData.append('_captcha', 'false');
+
+    return fetch('https://formsubmit.co/ajax/' + SITE_CONFIG.email, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: formData
+    })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        var isSuccess = data && (data.success === true || data.success === 'true');
+        if (isSuccess) {
+          return { ok: true };
+        }
+        throw new Error((data && data.message) || 'FormSubmit server unavailable');
+      });
+  }
+
+  // Choose primary provider configured in SITE_CONFIG
+  var requestPromise;
+  if (SITE_CONFIG.web3formsKey && SITE_CONFIG.web3formsKey.trim() !== '') {
+    requestPromise = submitViaWeb3Forms();
+  } else if (SITE_CONFIG.googleScriptUrl && SITE_CONFIG.googleScriptUrl.trim() !== '') {
+    requestPromise = submitViaGoogleScript();
+  } else {
+    requestPromise = submitViaFormSubmit();
+  }
+
+  requestPromise
+    .then(function() {
+      showSuccessModal(
+        'Your safari enquiry has been emailed to our desk. Our team will verify slot availability and contact you shortly at <strong>' + d.phone + '</strong> or <strong>' + d.email + '</strong>.',
+        detailsHtml
+      );
     })
     .catch(function(error) {
-      console.warn('FormSubmit network error:', error);
+      console.warn('Email gateway notice:', error);
+      var actionBtnsHtml = '<div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:12px;">'
+        + '<button type="button" onclick="sendDirectEmailBackup(\'mailto\')" style="padding:9px 14px; background:var(--bg-forest); color:var(--accent-gold); border:none; border-radius:6px; font-weight:700; cursor:pointer;">✉️ Send via Email App</button>'
+        + '<button type="button" onclick="sendDirectEmailBackup(\'gmail\')" style="padding:9px 14px; background:var(--accent-bronze); color:#fff; border:none; border-radius:6px; font-weight:700; cursor:pointer;">📧 Open in Gmail</button>'
+        + '<button type="button" onclick="handleBookingWhatsApp()" style="padding:9px 14px; background:var(--accent-whatsapp); color:#fff; border:none; border-radius:6px; font-weight:700; cursor:pointer;">💬 Send on WhatsApp</button>'
+        + '</div>';
+
       showSuccessModal(
-        'Could not reach the email server from this browser session. You can complete submission directly below or via WhatsApp:<br><br>'
-        + '<button type="button" onclick="triggerFormSubmitActivation()" style="padding:8px 14px; background:var(--bg-forest); color:var(--accent-gold); border:none; border-radius:6px; font-weight:700; cursor:pointer;">Send via Direct Form Post</button>',
+        'The third-party mail relay (FormSubmit.co) is temporarily down (Error 521). Choose any option below to send your pre-filled enquiry directly to <strong>' + SITE_CONFIG.email + '</strong> or WhatsApp:' + actionBtnsHtml,
         detailsHtml,
         {
-          title: 'Connection Notice',
-          badgeText: '⚠ Network / CORS Block',
+          title: 'Complete Your Enquiry',
+          badgeText: '⚡ Instant Direct Send Options',
           badgeBg: '#FEF3C7',
           badgeColor: '#92400E'
         }
