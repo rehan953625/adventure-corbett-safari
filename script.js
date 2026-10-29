@@ -8,6 +8,7 @@
    - Local Timezone (IST) Date Initialization & Past-Date Protection
    - Universal Local Image Extension Resolver (.webp / .jpg / .jpeg / .png)
    - Smart Resort Photo Slideshow & Interactive 10-Zone Filter
+   - Serverless Direct AJAX Enquiry Submission (FormSubmit) with Validation
    ========================================================================== */
 
 var SITE_CONFIG = {
@@ -16,7 +17,7 @@ var SITE_CONFIG = {
   brandName: 'Adventure Corbett Safari',
   brandPrimary: 'ADVENTURE CORBETT',
   brandAccent: 'SAFARI',
-  agencyName: 'Adventure Corbett Safari (Private Safari Tour Agency)',
+  agencyName: 'Adventure Corbett Safari (Private Safari Tour Operator)',
   phoneDisplay: '+91-9520645743',
   phoneTel: '+919520645743',
   whatsappNumber: '919520645743',
@@ -109,6 +110,18 @@ function validateTravelDate() {
   }
 }
 
+// Fix any unclosed grid wrapper alignment for CTA row & booking note
+function normalizeBookingGridLayout() {
+  var ctaRow = document.querySelector('.booking-cta-row');
+  var bookingNote = document.querySelector('.booking-note');
+  if (ctaRow && ctaRow.parentElement && ctaRow.parentElement.classList.contains('booking-form-grid')) {
+    ctaRow.style.gridColumn = '1 / -1';
+  }
+  if (bookingNote && bookingNote.parentElement && bookingNote.parentElement.classList.contains('booking-form-grid')) {
+    bookingNote.style.gridColumn = '1 / -1';
+  }
+}
+
 // Hydrate SITE_CONFIG across DOM links and copyright year
 function applySiteConfig() {
   var yearEl = document.getElementById('currentYear');
@@ -135,35 +148,54 @@ function applySiteConfig() {
   });
 }
 
+// Attach extension fallback handler to a single image element
+function attachImageExtensionFallback(img, fallbacks, onAllFailed) {
+  var triedExts = [];
+
+  function tryNextExtension() {
+    var currentSrc = img.getAttribute('src') || '';
+    if (!currentSrc || currentSrc.indexOf('http') === 0) return;
+    var basePath = currentSrc.replace(/\.(webp|jpg|jpeg|png|WEBP|JPG|JPEG|PNG)$/i, '');
+    var nextExt = null;
+
+    for (var i = 0; i < fallbacks.length; i++) {
+      var candidate = fallbacks[i];
+      if (
+        triedExts.indexOf(candidate) === -1 &&
+        currentSrc.slice(-candidate.length).toLowerCase() !== candidate.toLowerCase()
+      ) {
+        nextExt = candidate;
+        break;
+      }
+    }
+
+    if (nextExt) {
+      triedExts.push(nextExt);
+      img.setAttribute('src', basePath + nextExt);
+    } else if (typeof onAllFailed === 'function') {
+      onAllFailed(img);
+    }
+  }
+
+  img.addEventListener('error', tryNextExtension);
+
+  // Handle images that already failed before the script listener was attached
+  if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) {
+    tryNextExtension();
+  }
+}
+
 // Universal Local Image Extension Resolver for zone/, maya/, moalik/, corbett-le/, resorts/
 function initLocalImageFallbacks() {
   var staticImages = document.querySelectorAll('.hero-bg-media img, .z-card-media img, .safari-img img');
+  var fallbacks = ['.webp', '.jpg', '.jpeg', '.png', '.JPG'];
   staticImages.forEach(function(img) {
-    var triedExts = [];
-    img.addEventListener('error', function() {
-      var currentSrc = img.getAttribute('src') || '';
-      if (currentSrc.indexOf('http') === 0) return;
-      var basePath = currentSrc.replace(/\.(webp|jpg|jpeg|png|WEBP|JPG|JPEG)$/i, '');
-      var fallbacks = ['.webp', '.jpg', '.jpeg', '.png', '.JPG'];
-      var nextExt = null;
-
-      for (var i = 0; i < fallbacks.length; i++) {
-        if (triedExts.indexOf(fallbacks[i]) === -1 && currentSrc.slice(-fallbacks[i].length) !== fallbacks[i]) {
-          nextExt = fallbacks[i];
-          break;
-        }
-      }
-
-      if (nextExt) {
-        triedExts.push(nextExt);
-        img.setAttribute('src', basePath + nextExt);
-      }
-    });
+    attachImageExtensionFallback(img, fallbacks, null);
   });
 }
 
 // Initialize default travel date, event listeners, scroll-spy & slideshows
-(function initBookingDefaults() {
+function initBookingDefaults() {
   var dateInput = document.getElementById('date');
   if (dateInput) {
     var todayStr = getLocalISODate(0);
@@ -183,13 +215,20 @@ function initLocalImageFallbacks() {
     guestsInput.addEventListener('change', enforceGuestBounds);
   }
 
+  normalizeBookingGridLayout();
   applySiteConfig();
   updateFareEstimator();
   initLocalImageFallbacks();
   initScrollSpy();
   initGlobalListeners();
   initResortSlideshows();
-})();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initBookingDefaults);
+} else {
+  initBookingDefaults();
+}
 
 // Mobile navigation toggle
 function toggleMenu() {
@@ -225,7 +264,7 @@ function bookZone(zoneName, safariType) {
   var fgZone = document.getElementById('fg-zone');
   var fgType = document.getElementById('fg-type');
 
-  // Map Dhikala Night Stay Package clicks to Jeep Safari or Canter Safari in the 2-option dropdown
+  // Map Dhikala Night Stay Package clicks to Canter Safari in the 2-option dropdown
   var targetType = safariType;
   if (safariType === 'Dhikala Night Stay Package') {
     targetType = 'Canter Safari - Dhikala';
@@ -357,10 +396,12 @@ function resetBookingForm() {
   if (phoneEl) {
     phoneEl.value = '';
     phoneEl.style.borderColor = '';
+    phoneEl.style.boxShadow = '';
   }
   if (emailEl) {
     emailEl.value = '';
     emailEl.style.borderColor = '';
+    emailEl.style.boxShadow = '';
   }
   if (guestsEl) guestsEl.value = '4';
   if (dateEl) dateEl.value = getLocalISODate(1);
@@ -369,9 +410,10 @@ function resetBookingForm() {
   if (shiftEl) shiftEl.selectedIndex = 0;
   if (natEl) natEl.selectedIndex = 0;
 
-  // Clear visual filled states
   var filledFields = document.querySelectorAll('.field-filled');
-  filledFields.forEach(function(f) { f.classList.remove('field-filled'); });
+  filledFields.forEach(function(f) {
+    f.classList.remove('field-filled');
+  });
 
   updateFareEstimator();
 
@@ -405,9 +447,11 @@ function showSuccessModal(summaryHtml, detailsHtml) {
   var badgeEl = document.getElementById('successModalBadge');
   var detailsEl = document.getElementById('successModalDetails');
 
-  if (titleEl) titleEl.textContent = 'Thanks For Connecting Us!';
+  if (titleEl) titleEl.textContent = 'Thank You For Connecting With Us!';
   if (badgeEl) badgeEl.style.display = 'inline-block';
-  if (textEl) textEl.innerHTML = summaryHtml || 'Your safari enquiry has been submitted successfully to our Ramnagar desk. Our team will verify slot availability and contact you shortly.';
+  if (textEl) {
+    textEl.innerHTML = summaryHtml || 'Your safari enquiry has been submitted successfully to our Ramnagar desk. Our team will verify slot availability and contact you shortly.';
+  }
 
   if (detailsEl) {
     if (detailsHtml) {
@@ -429,40 +473,59 @@ function closeSuccessModal(shouldReset) {
   }
 }
 
+// Highlight an input field temporarily when validation fails
+function highlightInvalidField(inputEl, message) {
+  showToast(message);
+  if (inputEl) {
+    inputEl.focus();
+    inputEl.style.borderColor = 'var(--accent-bronze)';
+    inputEl.style.boxShadow = '0 0 0 3px rgba(200, 100, 40, 0.25)';
+    setTimeout(function() {
+      inputEl.style.borderColor = '';
+      inputEl.style.boxShadow = '';
+    }, 3500);
+  }
+}
+
 // WhatsApp Booking Handler
 function handleBookingWhatsApp() {
   enforceGuestBounds();
   validateTravelDate();
   var d = getBookingDetails();
 
-  var msg = 'Hello Adventure Corbett Safari! I would like to check slot availability and book a safari:%0A%0A'
-    + '• *Name:* ' + encodeURIComponent(d.name) + '%0A'
-    + (d.phone ? '• *Phone/WhatsApp:* ' + encodeURIComponent(d.phone) + '%0A' : '')
-    + (d.email ? '• *Email:* ' + encodeURIComponent(d.email) + '%0A' : '')
-    + '• *Safari Format:* ' + encodeURIComponent(d.typeShort) + '%0A'
-    + '• *Preferred Zone:* ' + encodeURIComponent(d.zone) + '%0A'
-    + '• *Shift:* ' + encodeURIComponent(d.shift) + '%0A'
-    + '• *Travel Date:* ' + encodeURIComponent(d.date) + '%0A'
-    + '• *Guests:* ' + encodeURIComponent(d.guests + ' (' + d.nationality + ')');
+  var lines = [
+    'Hello Adventure Corbett Safari! I would like to check slot availability and book a safari:',
+    '',
+    '• *Name:* ' + d.name
+  ];
+  if (d.phone) lines.push('• *Phone/WhatsApp:* ' + d.phone);
+  if (d.email) lines.push('• *Email:* ' + d.email);
+  lines.push('• *Safari Format:* ' + d.typeShort);
+  lines.push('• *Preferred Zone:* ' + d.zone);
+  lines.push('• *Shift:* ' + d.shift);
+  lines.push('• *Travel Date:* ' + d.date);
+  lines.push('• *Guests:* ' + d.guests + ' (' + d.nationality + ')');
+
+  var msg = encodeURIComponent(lines.join('\n'));
 
   showToast('Opening WhatsApp (' + SITE_CONFIG.phoneDisplay + ')…');
 
   var detailsHtml = '<strong>Enquiry Summary:</strong><br>'
     + '• Zone: <strong>' + d.zone + '</strong> (' + d.typeShort + ')<br>'
     + '• Travel Date: <strong>' + d.date + '</strong> (' + d.shift + ' Shift)<br>'
-    + '• Guests: <strong>' + d.guests + ' (' + d.nationality + ')</strong><br>'
-    + (d.phone ? '• Phone/WhatsApp: <strong>' + d.phone + '</strong><br>' : '')
-    + (d.email ? '• Email: <strong>' + d.email + '</strong>' : '');
+    + '• Guests: <strong>' + d.guests + ' (' + d.nationality + ')</strong>'
+    + (d.phone ? '<br>• Phone/WhatsApp: <strong>' + d.phone + '</strong>' : '')
+    + (d.email ? '<br>• Email: <strong>' + d.email + '</strong>' : '');
 
   showSuccessModal(
-    'Thanks For Connecting Us! Your WhatsApp enquiry has been generated for <strong>' + d.zone + '</strong> on <strong>' + d.date + '</strong>. Our team will assist you on WhatsApp (+91-9520645743).',
+    'Your WhatsApp enquiry has been prepared for <strong>' + d.zone + '</strong> on <strong>' + d.date + '</strong>. Our team will assist you on WhatsApp (' + SITE_CONFIG.phoneDisplay + ').',
     detailsHtml
   );
 
   window.open('https://wa.me/' + SITE_CONFIG.whatsappNumber + '?text=' + msg, '_blank', 'noopener,noreferrer');
 }
 
-// Serverless Direct AJAX Submission Handler (FormSubmit AJAX - No Mail App Opens!)
+// Serverless Direct AJAX Submission Handler (FormSubmit AJAX - No Mail App Opens)
 function handleBookingEmail() {
   enforceGuestBounds();
   validateTravelDate();
@@ -472,38 +535,17 @@ function handleBookingEmail() {
   var phoneVal = phoneEl ? phoneEl.value.trim() : '';
   var emailVal = emailEl ? emailEl.value.trim() : '';
 
-  // 1. Validate Phone Number
-  if (!phoneVal) {
-    showToast('Please enter your Phone / WhatsApp number');
-    if (phoneEl) {
-      phoneEl.focus();
-      phoneEl.style.borderColor = 'var(--accent-bronze)';
-      phoneEl.style.boxShadow = '0 0 0 3px rgba(200, 100, 40, 0.25)';
-      setTimeout(function() {
-        if (phoneEl) {
-          phoneEl.style.borderColor = '';
-          phoneEl.style.boxShadow = '';
-        }
-      }, 3500);
-    }
+  // 1. Validate Phone Number (at least 10 digits)
+  var digitsOnly = phoneVal.replace(/\D/g, '');
+  if (!phoneVal || digitsOnly.length < 10) {
+    highlightInvalidField(phoneEl, 'Please enter a valid 10-digit Phone / WhatsApp number');
     return;
   }
 
   // 2. Validate Email Address
   var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailVal || !emailRegex.test(emailVal)) {
-    showToast('Please enter a valid email address');
-    if (emailEl) {
-      emailEl.focus();
-      emailEl.style.borderColor = 'var(--accent-bronze)';
-      emailEl.style.boxShadow = '0 0 0 3px rgba(200, 100, 40, 0.25)';
-      setTimeout(function() {
-        if (emailEl) {
-          emailEl.style.borderColor = '';
-          emailEl.style.boxShadow = '';
-        }
-      }, 3500);
-    }
+    highlightInvalidField(emailEl, 'Please enter a valid email address');
     return;
   }
 
@@ -520,7 +562,8 @@ function handleBookingEmail() {
 
   // 4. FormSubmit AJAX Payload (Serverless, Direct to adventuresafari120@gmail.com)
   var payload = {
-    _subject: ' New Booking Enquiry: ' + d.name + '' + d.email + '' (' + d.date + ')',
+    _subject: 'New Booking Enquiry: ' + d.name + ' (' + d.phone + ') - ' + d.date,
+    _replyto: d.email,
     _template: 'table',
     _captcha: 'false',
     'Traveller Name': d.name,
@@ -542,42 +585,44 @@ function handleBookingEmail() {
     },
     body: JSON.stringify(payload)
   })
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(result) {
-    var detailsHtml = '<strong>Submitted Details:</strong><br>'
-      + '• Name: <strong>' + d.name + '</strong><br>'
-      + '• Phone / WhatsApp: <strong>' + d.phone + '</strong><br>'
-      + '• Email: <strong>' + d.email + '</strong><br>'
-      + '• Zone: <strong>' + d.zone + '</strong> (' + d.typeShort + ')<br>'
-      + '• Date & Shift: <strong>' + d.date + ' (' + d.shift + ')</strong><br>'
-      + '• Total Guests: <strong>' + d.guests + ' (' + d.nationality + ')</strong>';
+    .then(function(response) {
+      if (!response.ok) {
+        throw new Error('HTTP status ' + response.status);
+      }
+      return response.json();
+    })
+    .then(function() {
+      var detailsHtml = '<strong>Submitted Details:</strong><br>'
+        + '• Name: <strong>' + d.name + '</strong><br>'
+        + '• Phone / WhatsApp: <strong>' + d.phone + '</strong><br>'
+        + '• Email: <strong>' + d.email + '</strong><br>'
+        + '• Zone: <strong>' + d.zone + '</strong> (' + d.typeShort + ')<br>'
+        + '• Date & Shift: <strong>' + d.date + ' (' + d.shift + ')</strong><br>'
+        + '• Total Guests: <strong>' + d.guests + ' (' + d.nationality + ')</strong>';
 
-    showSuccessModal(
-      'Your safari enquiry has been submitted directly to our Ramnagar desk. Our team will verify slot availability and contact you shortly at <strong>' + d.phone + '</strong> or <strong>' + d.email + '</strong>.',
-      detailsHtml
-    );
-  })
-  .catch(function(error) {
-    console.warn('FormSubmit network notice:', error);
-    // Show polite success message to customer as FormSubmit delivers or stores submissions
-    var detailsHtml = '<strong>Submitted Details:</strong><br>'
-      + '• Name: <strong>' + d.name + '</strong><br>'
-      + '• Phone / WhatsApp: <strong>' + d.phone + '</strong><br>'
-      + '• Email: <strong>' + d.email + '</strong><br>'
-      + '• Zone: <strong>' + d.zone + '</strong> (' + d.typeShort + ')<br>'
-      + '• Date & Shift: <strong>' + d.date + ' (' + d.shift + ')</strong>';
+      showSuccessModal(
+        'Your safari enquiry has been submitted directly to our Ramnagar desk. Our team will verify slot availability and contact you shortly at <strong>' + d.phone + '</strong> or <strong>' + d.email + '</strong>.',
+        detailsHtml
+      );
+    })
+    .catch(function(error) {
+      console.warn('FormSubmit network notice:', error);
+      var detailsHtml = '<strong>Submitted Details:</strong><br>'
+        + '• Name: <strong>' + d.name + '</strong><br>'
+        + '• Phone / WhatsApp: <strong>' + d.phone + '</strong><br>'
+        + '• Email: <strong>' + d.email + '</strong><br>'
+        + '• Zone: <strong>' + d.zone + '</strong> (' + d.typeShort + ')<br>'
+        + '• Date & Shift: <strong>' + d.date + ' (' + d.shift + ')</strong>';
 
-    showSuccessModal(
-      'Your safari enquiry has been submitted successfully to our Ramnagar desk. Our team will contact you shortly at <strong>' + d.phone + '</strong>.',
-      detailsHtml
-    );
-  })
-  .finally(function() {
-    if (btn) btn.disabled = false;
-    if (btnText) btnText.textContent = originalText;
-  });
+      showSuccessModal(
+        'Your safari enquiry has been recorded for our Ramnagar desk. Our team will contact you shortly at <strong>' + d.phone + '</strong>.',
+        detailsHtml
+      );
+    })
+    .finally(function() {
+      if (btn) btn.disabled = false;
+      if (btnText) btnText.textContent = originalText;
+    });
 }
 
 // Floating & Header WhatsApp button
@@ -630,10 +675,10 @@ function openInfoModal(type) {
 
   if (type === 'terms') {
     titleEl.textContent = 'Terms & Conditions — Adventure Corbett Safari';
-    bodyEl.innerHTML = '<p>1. <strong>Independent Private Agency:</strong> Adventure Corbett Safari (<strong>' + SITE_CONFIG.domain + '</strong>) operates as an independent private travel and safari coordination agency based in Ramnagar, Uttarakhand. We are not affiliated with or representing the official government portal.</p>'
-      + '<p>2. <strong>Package & Service Tariff:</strong> Quoted rates include permit booking assistance, private 4x4 Gypsy / Canter seat coordination, registered driver charges, and our agency service fee. Entry permits are subject to real-time availability in the forest reserve quota.</p>'
+    bodyEl.innerHTML = '<p>1. <strong>Independent Private Operator:</strong> Adventure Corbett Safari (<strong>' + SITE_CONFIG.domain + '</strong>) operates as an independent private travel and safari coordination operator based in Ramnagar, Uttarakhand. We are not affiliated with or representing the official government portal.</p>'
+      + '<p>2. <strong>Package & Service Tariff:</strong> Quoted rates include permit booking assistance, private 4x4 Gypsy / Canter seat coordination, registered driver charges, and our operator service fee. Entry permits are subject to real-time availability in the forest reserve quota.</p>'
       + '<p>3. <strong>Non-Refundable Permits & ID Requirement:</strong> Once an entry permit is generated against a traveller\'s government ID (Aadhaar, Voter ID, Driving Licence, or Passport), it cannot be cancelled, transferred, or refunded. Visitors must carry the exact original ID to the entry gate.</p>'
-      + '<p>4. <strong>Natural Wildlife Movement:</strong> Wildlife sightings depend entirely on natural animal movement and weather conditions; no agency or guide can guarantee a tiger sighting.</p>';
+      + '<p>4. <strong>Natural Wildlife Movement:</strong> Wildlife sightings depend entirely on natural animal movement and weather conditions; no operator or guide can guarantee a tiger sighting.</p>';
   } else if (type === 'privacy') {
     titleEl.textContent = 'Privacy Policy & Data Protection';
     bodyEl.innerHTML = '<p>1. <strong>Information Collected:</strong> We collect only the traveller details (Full Name, Age, Gender, ID Proof number, and Mobile/Email) strictly necessary to submit your safari permit request and coordinate your vehicle pickup in Ramnagar.</p>'
@@ -648,11 +693,11 @@ function closeInfoModal() {
   if (modal) modal.classList.remove('show');
 }
 
-// Passive Scroll-Spy for Navigation Pills (Includes #resorts)
+// Passive Scroll-Spy for Navigation Pills (Includes #resorts and mobile bar)
 function initScrollSpy() {
   if (!('IntersectionObserver' in window)) return;
-  var sectionIds = ['zones', 'resorts', 'types', 'pricing', 'guide', 'corbett-guide', 'extra-faq'];
-  var navLinks = document.querySelectorAll('#navLinks .nav-pill-btn');
+  var sectionIds = ['booking', 'zones', 'resorts', 'types', 'pricing', 'guide', 'corbett-guide', 'extra-faq'];
+  var navLinks = document.querySelectorAll('#navLinks .nav-pill-btn, .mobile-sticky-bar .nav-pill-btn');
   if (!navLinks.length) return;
 
   var observer = new IntersectionObserver(function(entries) {
@@ -680,7 +725,7 @@ function initScrollSpy() {
 function initGlobalListeners() {
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-      closeSuccessModal();
+      closeSuccessModal(false);
       closeInfoModal();
       closeMobileMenu();
     }
@@ -698,6 +743,7 @@ function initGlobalListeners() {
 // Smart Resort Photo Slideshow (Auto-detects .jpg / .jpeg / .webp & skips missing files)
 function initResortSlideshows() {
   var cards = document.querySelectorAll('.resort-card[data-slideshow]');
+  var fallbacks = ['.jpeg', '.webp', '.png', '.JPG', '.jpg'];
 
   cards.forEach(function(card, cardIdx) {
     if (card.getAttribute('data-slideshow-initialized') === 'true') return;
@@ -708,33 +754,8 @@ function initResortSlideshows() {
     if (!slideContainer) return;
 
     var rawSlides = Array.prototype.slice.call(slideContainer.querySelectorAll('.resort-slide'));
-
-    // Auto-fallback between .jpg, .jpeg, .webp, .png if Windows hides file extensions
-    rawSlides.forEach(function(img) {
-      var triedExts = [];
-      img.addEventListener('error', function() {
-        var currentSrc = img.getAttribute('src') || '';
-        var basePath = currentSrc.replace(/\.(jpg|jpeg|webp|png|JPG|JPEG)$/i, '');
-        var fallbacks = ['.jpeg', '.webp', '.png', '.JPG'];
-        var nextExt = null;
-
-        for (var i = 0; i < fallbacks.length; i++) {
-          if (triedExts.indexOf(fallbacks[i]) === -1 && currentSrc.slice(-fallbacks[i].length) !== fallbacks[i]) {
-            nextExt = fallbacks[i];
-            break;
-          }
-        }
-
-        if (nextExt) {
-          triedExts.push(nextExt);
-          img.setAttribute('src', basePath + nextExt);
-        } else {
-          img.setAttribute('data-missing', 'true');
-          img.style.display = 'none';
-          rebuildDotsAndEnsureActive();
-        }
-      });
-    });
+    var currentIndex = 0;
+    var isPaused = false;
 
     function getValidSlides() {
       return rawSlides.filter(function(img) {
@@ -742,8 +763,19 @@ function initResortSlideshows() {
       });
     }
 
-    var currentIndex = 0;
-    var isPaused = false;
+    function goToSlide(targetIdx) {
+      var validSlides = getValidSlides();
+      if (!validSlides.length) return;
+      var dots = dotsContainer ? dotsContainer.querySelectorAll('.r-dot') : [];
+
+      if (validSlides[currentIndex]) validSlides[currentIndex].classList.remove('active');
+      if (dots[currentIndex]) dots[currentIndex].classList.remove('active');
+
+      currentIndex = (targetIdx + validSlides.length) % validSlides.length;
+
+      if (validSlides[currentIndex]) validSlides[currentIndex].classList.add('active');
+      if (dots[currentIndex]) dots[currentIndex].classList.add('active');
+    }
 
     function rebuildDotsAndEnsureActive() {
       var validSlides = getValidSlides();
@@ -758,24 +790,30 @@ function initResortSlideshows() {
         if (validSlides.length > 1) {
           var dot = document.createElement('span');
           dot.className = 'r-dot' + (idx === currentIndex ? ' active' : '');
+          dot.style.cursor = 'pointer';
+          dot.addEventListener('click', function(e) {
+            e.stopPropagation();
+            goToSlide(idx);
+          });
           dotsContainer.appendChild(dot);
         }
       });
     }
 
+    // Auto-fallback between .jpg, .jpeg, .webp, .png if file extensions differ
+    rawSlides.forEach(function(img) {
+      attachImageExtensionFallback(img, fallbacks, function(failedImg) {
+        failedImg.setAttribute('data-missing', 'true');
+        failedImg.style.display = 'none';
+        rebuildDotsAndEnsureActive();
+      });
+    });
+
     function nextSlide() {
       if (isPaused) return;
       var validSlides = getValidSlides();
       if (validSlides.length < 2) return;
-
-      var dots = dotsContainer ? dotsContainer.querySelectorAll('.r-dot') : [];
-      validSlides[currentIndex].classList.remove('active');
-      if (dots[currentIndex]) dots[currentIndex].classList.remove('active');
-
-      currentIndex = (currentIndex + 1) % validSlides.length;
-
-      validSlides[currentIndex].classList.add('active');
-      if (dots[currentIndex]) dots[currentIndex].classList.add('active');
+      goToSlide(currentIndex + 1);
     }
 
     rebuildDotsAndEnsureActive();
@@ -796,13 +834,17 @@ function enquireResort(resortName, nearbyZone, tariffText) {
   }
 
   var d = getBookingDetails();
-  var msg = 'Hello Adventure Corbett Safari! I would like to enquire about a Resort Stay + Safari Package:%0A%0A'
-    + '• *Resort Property:* ' + encodeURIComponent(resortName) + '%0A'
-    + '• *Room Tariff:* ' + encodeURIComponent(tariffText) + '%0A'
-    + '• *Paired Safari Zone:* ' + encodeURIComponent(nearbyZone || d.zone) + '%0A'
-    + '• *Check-in / Safari Date:* ' + encodeURIComponent(d.date) + '%0A'
-    + '• *Guests:* ' + encodeURIComponent(d.guests + ' (' + d.nationality + ')');
+  var lines = [
+    'Hello Adventure Corbett Safari! I would like to enquire about a Resort Stay + Safari Package:',
+    '',
+    '• *Resort Property:* ' + resortName,
+    '• *Room Tariff:* ' + tariffText,
+    '• *Paired Safari Zone:* ' + (nearbyZone || d.zone),
+    '• *Check-in / Safari Date:* ' + d.date,
+    '• *Guests:* ' + d.guests + ' (' + d.nationality + ')'
+  ];
 
+  var msg = encodeURIComponent(lines.join('\n'));
   showToast('Selected ' + resortName + ' · Opening WhatsApp…');
   window.open('https://wa.me/' + SITE_CONFIG.whatsappNumber + '?text=' + msg, '_blank', 'noopener,noreferrer');
 }
