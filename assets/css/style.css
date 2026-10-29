@@ -126,46 +126,34 @@
 
 
 
+
 @media (max-width: 600px) {
   .hero-slider {
-    height: 420px !important;
-    min-height: 420px !important;
-    overflow: hidden;
-  }
-
-  .hero-slide {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    height: 420px;
+    min-height: 420px;
   }
 
   .hero-slide > img {
-    position: absolute;
-    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
-  }
-
-  .hero-overlay {
-    inset: 0;
+    object-position: center 40%;
   }
 
   .hero-caption {
     width: 90%;
     height: 100%;
-    margin-left: 5%;
-    padding: 20px 0 55px;
+    margin: 0 auto;
+    padding: 25px 0 50px;
+    align-items: center;
     justify-content: center;
+    text-align: center;
   }
 
   .hero-caption h1,
   .hero-caption h2 {
-    font-size: clamp(28px, 7vw, 36px);
+    font-size: clamp(27px, 7vw, 34px);
     line-height: 1.15;
-    margin-bottom: 12px;
   }
 
   .hero-caption > p:not(.eyebrow) {
@@ -173,7 +161,8 @@
   }
 
   .slider-controls {
-    left: 5%;
+    left: 50%;
+    transform: translateX(-50%);
     bottom: 14px;
   }
 }
