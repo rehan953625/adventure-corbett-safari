@@ -450,7 +450,7 @@ function showSuccessModal(summaryHtml, detailsHtml) {
   if (titleEl) titleEl.textContent = 'Thank You For Connecting With Us!';
   if (badgeEl) badgeEl.style.display = 'inline-block';
   if (textEl) {
-    textEl.innerHTML = summaryHtml || 'Your safari enquiry has been submitted successfully to our Ramnagar desk. Our team will verify slot availability and contact you shortly.';
+    textEl.innerHTML = summaryHtml || 'Your safari enquiry has been submitted successfully. Our team will contact you shortly.';
   }
 
   if (detailsEl) {
@@ -601,7 +601,7 @@ function handleBookingEmail() {
         + '• Total Guests: <strong>' + d.guests + ' (' + d.nationality + ')</strong>';
 
       showSuccessModal(
-        'Your safari enquiry has been submitted directly to our Ramnagar desk. Our team will verify slot availability and contact you shortly at <strong>' + d.phone + '</strong> or <strong>' + d.email + '</strong>.',
+        'Your safari enquiry has been submitted directly to our desk. Our team will contact you shortly at <strong>' + d.phone + '</strong> or <strong>' + d.email + '</strong>.',
         detailsHtml
       );
     })
@@ -615,7 +615,7 @@ function handleBookingEmail() {
         + '• Date & Shift: <strong>' + d.date + ' (' + d.shift + ')</strong>';
 
       showSuccessModal(
-        'Your safari enquiry has been recorded for our Ramnagar desk. Our team will contact you shortly at <strong>' + d.phone + '</strong>.',
+        'Your safari enquiry has been recorded for our desk. Our team will contact you shortly at <strong>' + d.phone + '</strong>.',
         detailsHtml
       );
     })
