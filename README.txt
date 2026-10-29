@@ -1,0 +1,1 @@
+Add your own licensed images with these exact names: logo.png, safari-1.webp, safari-2.webp, safari-3.webp, corbett-landscape.webp, jeep-safari.webp, canter-safari.webp, elephant-safari.webp. Update index.html if filenames differ.
