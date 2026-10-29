@@ -728,7 +728,7 @@ function handleBookingEmail() {
   requestPromise
     .then(function() {
       showSuccessModal(
-        'Your safari enquiry has been emailed to our desk. Our team will verify slot availability and contact you shortly at <strong>' + d.phone + '</strong> or <strong>' + d.email + '</strong>.',
+        'Your safari enquiry has been emailed to our desk. Our team will contact you shortly at <strong>' + d.phone + '</strong> or <strong>' + d.email + '</strong>.',
         detailsHtml
       );
     })
