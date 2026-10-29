@@ -1,6 +1,0 @@
-Each navigation menu link opens a separate HTML page (no menu anchor scrolling):
-index.html, jeep-safari.html, night-stay.html, canter-safari.html, about-us.html, contact.html, elephant-safari.html, privacy-policy.html.
-All pages share the same CSS, JS, header and footer structure for consistency.
-For GitHub Pages enquiry delivery, replace YOUR_FORM_ID in each page's form action with your verified Formspree form ID. Verify adventuresafari120@gmail.com with Formspree first.
-Replace placeholder images in assets/images/ with your own licensed images. See assets/images/README.txt.
-Draft rates were supplied by the site owner; confirm current official rates, permits, rules and legal/welfare requirements before publishing.
