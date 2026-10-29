@@ -8,7 +8,7 @@
    - Local Timezone (IST) Date Initialization & Past-Date Protection
    - Universal Local Image Extension Resolver (.webp / .jpg / .jpeg / .png)
    - Smart Resort Photo Slideshow & Interactive 10-Zone Filter
-   - Serverless Direct AJAX Enquiry Submission (FormSubmit) with Validation
+   - Verified FormSubmit AJAX Enquiry Submission with Activation/Status Check
    ========================================================================== */
 
 var SITE_CONFIG = {
@@ -439,16 +439,24 @@ function showToast(msg) {
   }
 }
 
-// Show Thank You Success Modal with submission details
-function showSuccessModal(summaryHtml, detailsHtml) {
+// Show Thank You / Status Modal with custom badge styling
+function showSuccessModal(summaryHtml, detailsHtml, statusOptions) {
+  var opts = statusOptions || {};
   var modal = document.getElementById('successModal');
   var titleEl = document.getElementById('successModalTitle');
   var textEl = document.getElementById('successModalText');
   var badgeEl = document.getElementById('successModalBadge');
   var detailsEl = document.getElementById('successModalDetails');
 
-  if (titleEl) titleEl.textContent = 'Thank You For Connecting With Us!';
-  if (badgeEl) badgeEl.style.display = 'inline-block';
+  if (titleEl) {
+    titleEl.textContent = opts.title || 'Thank You For Connecting With Us!';
+  }
+  if (badgeEl) {
+    badgeEl.style.display = 'inline-block';
+    badgeEl.textContent = opts.badgeText || '✓ Form Submitted Successfully';
+    badgeEl.style.background = opts.badgeBg || '#DCFCE7';
+    badgeEl.style.color = opts.badgeColor || '#166534';
+  }
   if (textEl) {
     textEl.innerHTML = summaryHtml || 'Your safari enquiry has been submitted successfully. Our team will contact you shortly.';
   }
@@ -525,7 +533,45 @@ function handleBookingWhatsApp() {
   window.open('https://wa.me/' + SITE_CONFIG.whatsappNumber + '?text=' + msg, '_blank', 'noopener,noreferrer');
 }
 
-// Serverless Direct AJAX Submission Handler (FormSubmit AJAX - No Mail App Opens)
+// Trigger one-time FormSubmit domain activation via standard HTML POST in a new tab
+function triggerFormSubmitActivation() {
+  var d = getBookingDetails();
+  var form = document.createElement('form');
+  form.method = 'POST';
+  form.action = 'https://formsubmit.co/' + SITE_CONFIG.email;
+  form.target = '_blank';
+  form.style.display = 'none';
+
+  var fields = {
+    name: d.name,
+    phone: d.phone,
+    email: d.email,
+    safari_format: d.typeShort,
+    preferred_zone: d.zone,
+    safari_shift: d.shift,
+    travel_date: d.date,
+    total_guests: d.guests + ' (' + d.nationality + ')',
+    _subject: 'New Booking Enquiry: ' + d.name + ' (' + d.phone + ') - ' + d.date,
+    _template: 'table',
+    _captcha: 'false'
+  };
+
+  Object.keys(fields).forEach(function(key) {
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = fields[key];
+    form.appendChild(input);
+  });
+
+  document.body.appendChild(form);
+  form.submit();
+  setTimeout(function() {
+    if (form.parentNode) form.parentNode.removeChild(form);
+  }, 1500);
+}
+
+// Serverless Direct AJAX Submission Handler (FormSubmit AJAX with real response check)
 function handleBookingEmail() {
   enforceGuestBounds();
   validateTravelDate();
@@ -550,6 +596,28 @@ function handleBookingEmail() {
   }
 
   var d = getBookingDetails();
+  var detailsHtml = '<strong>Submitted Details:</strong><br>'
+    + '• Name: <strong>' + d.name + '</strong><br>'
+    + '• Phone / WhatsApp: <strong>' + d.phone + '</strong><br>'
+    + '• Email: <strong>' + d.email + '</strong><br>'
+    + '• Zone: <strong>' + d.zone + '</strong> (' + d.typeShort + ')<br>'
+    + '• Date & Shift: <strong>' + d.date + ' (' + d.shift + ')</strong><br>'
+    + '• Total Guests: <strong>' + d.guests + ' (' + d.nationality + ')</strong>';
+
+  // Check if page is opened directly via file:// (FormSubmit blocks file:// protocol)
+  if (window.location.protocol === 'file:') {
+    showSuccessModal(
+      'FormSubmit blocks emails when <code>index.html</code> is opened directly as a local file (<code>file://</code>). Please open the site via <strong>Live Server (http://localhost)</strong> or your live domain (<strong>' + SITE_CONFIG.domain + '</strong>) to receive emails.',
+      detailsHtml,
+      {
+        title: 'Local File Mode Detected',
+        badgeText: '⚠ Run via http://localhost or Live Domain',
+        badgeBg: '#FEF3C7',
+        badgeColor: '#92400E'
+      }
+    );
+    return;
+  }
 
   // 3. UI Loading Feedback (Disable button & show sending state)
   var btn = document.getElementById('btnSubmitEnquiry');
@@ -560,63 +628,80 @@ function handleBookingEmail() {
   if (btnText) btnText.textContent = 'Submitting Query…';
   showToast('Submitting your query directly to our desk…');
 
-  // 4. FormSubmit AJAX Payload (Serverless, Direct to adventuresafari120@gmail.com)
-  var payload = {
-    _subject: 'New Booking Enquiry: ' + d.name + ' (' + d.phone + ') - ' + d.date,
-    _replyto: d.email,
-    _template: 'table',
-    _captcha: 'false',
-    'Traveller Name': d.name,
-    'Phone / WhatsApp': d.phone,
-    'Email Address': d.email,
-    'Safari Format': d.typeShort,
-    'Preferred Zone': d.zone,
-    'Safari Shift': d.shift,
-    'Travel Date': d.date,
-    'Total Guests': d.guests + ' (' + d.nationality + ')',
-    'Submitted On': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
-  };
+  // 4. Use FormData with clean field keys for maximum FormSubmit deliverability
+  var formData = new FormData();
+  formData.append('name', d.name);
+  formData.append('phone', d.phone);
+  formData.append('email', d.email);
+  formData.append('_replyto', d.email);
+  formData.append('safari_format', d.typeShort);
+  formData.append('preferred_zone', d.zone);
+  formData.append('safari_shift', d.shift);
+  formData.append('travel_date', d.date);
+  formData.append('total_guests', d.guests + ' (' + d.nationality + ')');
+  formData.append('submitted_on', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
+  formData.append('_subject', 'New Booking Enquiry: ' + d.name + ' (' + d.phone + ') - ' + d.date);
+  formData.append('_template', 'table');
+  formData.append('_captcha', 'false');
 
-  fetch('https://formsubmit.co/ajax/' + encodeURIComponent(SITE_CONFIG.email), {
+  fetch('https://formsubmit.co/ajax/' + SITE_CONFIG.email, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
-    body: JSON.stringify(payload)
+    body: formData
   })
     .then(function(response) {
-      if (!response.ok) {
-        throw new Error('HTTP status ' + response.status);
-      }
       return response.json();
     })
-    .then(function() {
-      var detailsHtml = '<strong>Submitted Details:</strong><br>'
-        + '• Name: <strong>' + d.name + '</strong><br>'
-        + '• Phone / WhatsApp: <strong>' + d.phone + '</strong><br>'
-        + '• Email: <strong>' + d.email + '</strong><br>'
-        + '• Zone: <strong>' + d.zone + '</strong> (' + d.typeShort + ')<br>'
-        + '• Date & Shift: <strong>' + d.date + ' (' + d.shift + ')</strong><br>'
-        + '• Total Guests: <strong>' + d.guests + ' (' + d.nationality + ')</strong>';
+    .then(function(result) {
+      var isSuccess = result && (result.success === true || result.success === 'true');
+      var serverMsg = (result && result.message) ? String(result.message) : '';
 
-      showSuccessModal(
-        'Your safari enquiry has been submitted directly to our desk. Our team will contact you shortly at <strong>' + d.phone + '</strong> or <strong>' + d.email + '</strong>.',
-        detailsHtml
-      );
+      if (isSuccess) {
+        showSuccessModal(
+          'Your safari enquiry has been emailed to our desk. Our team will verify slot availability and contact you shortly at <strong>' + d.phone + '</strong> or <strong>' + d.email + '</strong>.',
+          detailsHtml
+        );
+      } else if (serverMsg.toLowerCase().indexOf('activation') !== -1 || serverMsg.toLowerCase().indexOf('activate') !== -1) {
+        // First-time domain activation required by FormSubmit
+        showSuccessModal(
+          'FormSubmit has sent a one-time <strong>"Activate Form"</strong> email to <strong>' + SITE_CONFIG.email + '</strong> (please check Inbox &amp; Spam folder). Click <strong>Activate Form</strong> in that email once, and all future enquiries on this domain will arrive automatically.<br><br>'
+          + '<button type="button" onclick="triggerFormSubmitActivation()" style="padding:8px 14px; background:var(--bg-forest); color:var(--accent-gold); border:none; border-radius:6px; font-weight:700; cursor:pointer;">Resend Activation Email</button>',
+          detailsHtml + '<br>• Server Notice: <em>' + serverMsg + '</em>',
+          {
+            title: 'One-Time Email Activation Needed',
+            badgeText: '⚠ Check ' + SITE_CONFIG.email + ' (Inbox / Spam)',
+            badgeBg: '#FEF3C7',
+            badgeColor: '#92400E'
+          }
+        );
+      } else {
+        showSuccessModal(
+          'FormSubmit returned a notice: <strong>' + (serverMsg || 'Unable to deliver email from this environment.') + '</strong><br><br>'
+          + '<button type="button" onclick="triggerFormSubmitActivation()" style="padding:8px 14px; background:var(--bg-forest); color:var(--accent-gold); border:none; border-radius:6px; font-weight:700; cursor:pointer;">Send via Direct Form Post</button>',
+          detailsHtml,
+          {
+            title: 'Email Verification Notice',
+            badgeText: '⚠ Action Required',
+            badgeBg: '#FEF3C7',
+            badgeColor: '#92400E'
+          }
+        );
+      }
     })
     .catch(function(error) {
-      console.warn('FormSubmit network notice:', error);
-      var detailsHtml = '<strong>Submitted Details:</strong><br>'
-        + '• Name: <strong>' + d.name + '</strong><br>'
-        + '• Phone / WhatsApp: <strong>' + d.phone + '</strong><br>'
-        + '• Email: <strong>' + d.email + '</strong><br>'
-        + '• Zone: <strong>' + d.zone + '</strong> (' + d.typeShort + ')<br>'
-        + '• Date & Shift: <strong>' + d.date + ' (' + d.shift + ')</strong>';
-
+      console.warn('FormSubmit network error:', error);
       showSuccessModal(
-        'Your safari enquiry has been recorded for our desk. Our team will contact you shortly at <strong>' + d.phone + '</strong>.',
-        detailsHtml
+        'Could not reach the email server from this browser session. You can complete submission directly below or via WhatsApp:<br><br>'
+        + '<button type="button" onclick="triggerFormSubmitActivation()" style="padding:8px 14px; background:var(--bg-forest); color:var(--accent-gold); border:none; border-radius:6px; font-weight:700; cursor:pointer;">Send via Direct Form Post</button>',
+        detailsHtml,
+        {
+          title: 'Connection Notice',
+          badgeText: '⚠ Network / CORS Block',
+          badgeBg: '#FEF3C7',
+          badgeColor: '#92400E'
+        }
       );
     })
     .finally(function() {
