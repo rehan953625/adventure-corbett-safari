@@ -128,41 +128,55 @@
 
 @media (max-width: 600px) {
   .hero-slider {
-    height: 380px !important;
-    min-height: 380px !important;
+    height: 420px !important;
+    min-height: 420px !important;
+    overflow: hidden;
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .hero-slide > img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
+  }
+
+  .hero-overlay {
+    inset: 0;
   }
 
   .hero-caption {
     width: 90%;
     height: 100%;
     margin-left: 5%;
-    padding: 20px 0 50px;
-    justify-content: flex-end;
+    padding: 20px 0 55px;
+    justify-content: center;
   }
 
   .hero-caption h1,
   .hero-caption h2 {
-    font-size: 26px;
-    margin-bottom: 8px;
+    font-size: clamp(28px, 7vw, 36px);
+    line-height: 1.15;
+    margin-bottom: 12px;
   }
 
   .hero-caption > p:not(.eyebrow) {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .slider-controls {
-    bottom: 12px;
     left: 5%;
+    bottom: 14px;
   }
 }
-
 
 
 
