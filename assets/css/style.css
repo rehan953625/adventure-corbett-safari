@@ -207,3 +207,64 @@
     left: 5%;
   }
 }
+
+/* JEEP SAFARI HERO BACKGROUND */
+.page-hero {
+  position: relative;
+  min-height: clamp(360px, 53.85vw, 700px);
+  background-image: url('../images/jeep-tiger-safari.webp');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Dark overlay for readable text */
+.page-hero .page-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(5, 24, 17, 0.82) 0%,
+    rgba(5, 24, 17, 0.48) 55%,
+    rgba(5, 24, 17, 0.16) 100%
+  );
+  z-index: 1;
+}
+
+/* Keep heading above the image and overlay */
+.page-hero .page-hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 600px) {
+  .page-hero {
+    min-height: 420px;
+    background-position: center center;
+  }
+
+  .page-hero .page-hero-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(5, 24, 17, 0.58),
+      rgba(5, 24, 17, 0.76)
+    );
+  }
+
+  .page-hero .page-hero-content {
+    padding: 55px 20px;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(34px, 9vw, 46px);
+    line-height: 1.12;
+  }
+}
+
