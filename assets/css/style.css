@@ -32,10 +32,54 @@
 
 @media (max-width: 600px) {
   .hero-slider {
-    height: 480px;
-    min-height: 480px;
+    height: 420px;
+    min-height: 420px;
+    background: #071b12;
+  }
+
+  .hero-slide > img {
+    width: 100%;
+    height: 240px;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .hero-overlay {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      #071b12 240px,
+      #071b12 100%
+    );
+  }
+
+  .hero-caption {
+    width: 90%;
+    height: auto;
+    margin: 0 5%;
+    padding: 250px 0 55px;
+    justify-content: flex-start;
+  }
+
+  .hero-caption h1,
+  .hero-caption h2 {
+    font-size: 30px;
+    margin-bottom: 10px;
+  }
+
+  .hero-caption > p:not(.eyebrow) {
+    font-size: 14px;
+  }
+
+  .slider-controls {
+    left: 5%;
+    bottom: 15px;
   }
 }
+
+
+
+
 
 .brand {
   color: #ffffff !important;
