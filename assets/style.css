@@ -2322,3 +2322,21 @@ img {
     font-size: 11px !important;
   }
 }
+
+
+/* =========================================================
+   GLOBAL FOOTER GST & LEGAL REGISTRATION BAR (ALL PAGES)
+   Automatically displays verified GSTIN & Legal Entity across
+   every page of adventurecorbettsafari.com
+   ========================================================= */
+.footer-disclosure::after {
+  content: "Registered Business Details: Operated by Rahino (Proprietor: Mohd Rehan) • GSTIN: 05FIKPR6535Q1ZB • Regd. Office: House No. 1/83B, Main Road, Near Chand Masjid (H.No. 33), Mahua Khera Ganj, Distt. Udham Singh Nagar, Uttarakhand – 244713";
+  display: block;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f0c76f;
+  font-weight: 700;
+  font-size: 11.5px;
+  line-height: 1.55;
+}
