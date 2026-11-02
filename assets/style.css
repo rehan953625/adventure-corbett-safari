@@ -1,0 +1,2324 @@
+/* ==========================================================================
+   ADVENTURE CORBETT SAFARI - GLOBAL STYLESHEET (assets/style.css)
+   ========================================================================== */
+
+:root {
+  --forest: #173d2b;
+  --forest2: #24583d;
+  --forest-light: #eef4f0;
+  --gold: #d7a84b;
+  --gold-dark: #8a6427;
+  --ink: #1c2922;
+  --muted: #5a6960;
+  --cream: #f6f5ef;
+  --white: #ffffff;
+  --line: #e2e8e4;
+  --shadow: 0 14px 38px rgba(17, 43, 29, 0.10);
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ink);
+  line-height: 1.65;
+  background: var(--white);
+  min-width: 250px;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+/* TOPBAR */
+.topbar {
+  background: #102c20;
+  color: var(--white);
+  font-size: 13px;
+}
+
+.topbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.topbar-left {
+  color: #c9d8ce;
+  font-size: 12px;
+}
+
+.topbar-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.topbar a:hover {
+  color: var(--gold);
+}
+
+/* SITE HEADER */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.nav-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 72px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.brand {
+  font-weight: 800;
+  color: var(--forest);
+  font-size: 20px;
+  line-height: 1.15;
+  letter-spacing: 0.5px;
+}
+
+.brand small {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--gold-dark);
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.nav-links a {
+  padding: 9px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--forest2);
+  border-color: var(--gold);
+}
+
+.menu-toggle {
+  display: none;
+  background: var(--forest);
+  color: var(--white);
+  border: 0;
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+
+/* =================================
+   RESPONSIVE HERO SLIDER
+================================= */
+
+
+/* =========================================
+   JIM CORBETT RESPONSIVE HERO SLIDER
+========================================= */
+
+.hero {
+    position: relative;
+    width: 100%;
+    height: clamp(480px, 44.27vw, 850px);
+    min-height: 0;
+    background: #1c3527;
+    overflow: hidden;
+    color: var(--white);
+}
+
+.slides {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+    overflow: hidden;
+    background: #1c3527;
+}
+
+.slide.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* IMAGE */
+
+.slide-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    object-position: center;
+}
+
+/* DARK OVERLAY */
+
+.slide::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+        90deg,
+        rgba(6, 24, 15, 0.48) 0%,
+        rgba(6, 24, 15, 0.25) 48%,
+        rgba(6, 24, 15, 0.06) 100%
+    );
+    pointer-events: none;
+}
+
+/* TEXT CONTENT */
+
+.slide-content {
+    position: relative;
+    z-index: 2;
+    width: min(1160px, 100%);
+    margin: 0 auto;
+    padding: 50px 24px 65px;
+}
+
+.eyebrow {
+    display: inline-block;
+    color: #f0c76f;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.slide h1,
+.slide h2 {
+    font-size: clamp(28px, 4.5vw, 50px);
+    line-height: 1.15;
+    max-width: 760px;
+    margin: 12px 0 14px;
+}
+
+.slide p {
+    max-width: 620px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #ffffff;
+    margin: 0 0 24px;
+}
+
+/* SLIDER DOTS */
+
+.hero-dots {
+    position: absolute;
+    z-index: 5;
+    bottom: 22px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.hero-dots button {
+    width: 11px;
+    height: 11px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.hero-dots button.active {
+    background: var(--gold);
+    transform: scale(1.3);
+}
+
+/* TABLET */
+
+@media (max-width: 900px) and (min-width: 601px) {
+    .hero {
+        height: 480px;
+    }
+
+    .slide-content {
+        padding: 35px 28px 55px;
+    }
+
+    .slide h1,
+    .slide h2 {
+        font-size: 36px;
+    }
+
+    .slide p {
+        font-size: 15px;
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .hero {
+        height: 500px;
+        min-height: 0;
+    }
+
+    .slides {
+        height: 100%;
+    }
+
+    .slide {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+    }
+
+    /* FULL IMAGE WITHOUT CROPPING */
+
+    .slide-image {
+        position: relative;
+        inset: auto;
+        flex: 0 0 190px;
+        width: 100%;
+        height: 190px;
+        object-fit: contain;
+        object-position: center;
+        background: #1c3527;
+    }
+
+    /* Remove desktop overlay on mobile */
+
+    .slide::before {
+        display: none;
+    }
+
+    /* TEXT BELOW IMAGE */
+
+    .slide-content {
+        position: relative;
+        flex: 1;
+        width: 100%;
+        margin: 0;
+        padding: 12px 20px 45px;
+        background: #1c3527;
+        overflow: hidden;
+    }
+
+    .eyebrow {
+        font-size: 10px;
+        letter-spacing: 1.2px;
+    }
+
+    .slide h1,
+    .slide h2 {
+        font-size: 23px;
+        line-height: 1.2;
+        margin: 8px 0 10px;
+    }
+
+    .slide p {
+        font-size: 13px;
+        line-height: 1.45;
+        margin: 0;
+        color: #e8f0eb;
+    }
+
+    .hero-dots {
+        bottom: 13px;
+        gap: 9px;
+    }
+
+    .hero-dots button {
+        width: 9px;
+        height: 9px;
+    }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+    .slide,
+    .hero-dots button {
+        transition: none;
+    }
+}
+
+/* =========================================
+   EXISTING PAGE HERO - KEEP AS IT IS
+========================================= */
+
+.page-hero {
+    padding: 85px 20px;
+    background-size: cover;
+    background-position: center;
+    color: var(--white);
+}
+
+.page-hero h1 {
+    font-size: clamp(32px, 5vw, 48px);
+    margin: 8px 0;
+    line-height: 1.15;
+}
+
+.page-hero p {
+    max-width: 650px;
+    margin: 0;
+    font-size: 16.5px;
+    color: #e4ece6;
+}
+
+
+
+
+
+/* ENQUIRY BAR & FORM */
+.enquiry {
+  position: relative;
+  margin: -1px auto 0;
+  background: var(--forest);
+  color: var(--white);
+  padding: 32px 20px;
+  border-bottom: 3px solid var(--gold);
+}
+
+.form-wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+.form-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.form-title h2 {
+  font-size: 22px;
+  margin: 0;
+}
+
+.form-subtitle {
+  font-size: 13px;
+  color: #d7e3da;
+  margin-top: 2px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) auto;
+  gap: 10px;
+}
+
+.form-grid input,
+.form-grid select {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 14px;
+  border: 1px solid #d9e1da;
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--white);
+  color: var(--ink);
+}
+
+.form-note {
+  font-size: 11.5px;
+  color: #d6e0d8;
+  margin: 10px 0 0;
+}
+
+.form-feedback {
+  display: none;
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+/* SECTIONS & CARDS */
+.section {
+  padding: 68px 20px;
+}
+
+.section.alt {
+  background: var(--cream);
+}
+
+.section-head {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 38px;
+}
+
+.section-head .eyebrow {
+  color: var(--gold-dark);
+}
+
+.section-head h2 {
+  font-size: clamp(26px, 3.2vw, 36px);
+  line-height: 1.2;
+  color: var(--forest);
+  margin: 8px 0 12px;
+}
+
+.section-head p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 15px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 44px rgba(17, 43, 29, 0.15);
+}
+
+.card-image {
+  height: 210px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.card-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.35), transparent 60%);
+}
+
+.card-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  background: rgba(23, 61, 43, 0.92);
+  color: #f5ce78;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card-body h3 {
+  margin: 0 0 10px;
+  color: var(--forest);
+  font-size: 20px;
+}
+
+.card-body p {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 16px;
+}
+
+.card-meta {
+  list-style: none;
+  padding: 12px 0 0;
+  margin: auto 0 16px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.card-meta li {
+  margin-bottom: 5px;
+}
+
+.card-meta strong {
+  color: var(--forest);
+}
+
+.text-link {
+  font-weight: 800;
+  color: var(--gold-dark);
+  font-size: 13.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.text-link:hover {
+  color: var(--forest);
+}
+
+/* ZONE TABLE */
+.table-wrap {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.zone-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.zone-table th {
+  background: var(--forest);
+  color: var(--white);
+  padding: 15px 18px;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.zone-table td {
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  vertical-align: top;
+}
+
+.zone-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.zone-table tr:nth-child(even) td {
+  background: #fafbf9;
+}
+
+.zone-badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: var(--forest-light);
+  color: var(--forest);
+}
+
+/* TIMINGS GRID */
+.timings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.timing-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--forest);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.timing-card h3 {
+  margin: 0 0 10px;
+  color: var(--forest);
+  font-size: 19px;
+}
+
+.timing-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.timing-card li {
+  margin-bottom: 8px;
+}
+
+/* FEATURE STRIP */
+.feature-strip {
+  background: var(--forest);
+  color: var(--white);
+  padding: 36px 20px;
+}
+
+.feature-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  text-align: center;
+}
+
+.feature-inner strong {
+  display: block;
+  font-size: 17px;
+  color: #f3c969;
+  margin-bottom: 4px;
+}
+
+.feature-inner span {
+  font-size: 13px;
+  color: #d8e4dc;
+}
+
+/* FAQ ACCORDION */
+.faq-list {
+  max-width: 860px;
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
+}
+
+.faq-item {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(17, 43, 29, 0.05);
+}
+
+.faq-item summary {
+  padding: 18px 22px;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--forest);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: "+";
+  font-size: 22px;
+  color: var(--gold-dark);
+  font-weight: 700;
+}
+
+.faq-item[open] summary::after {
+  content: "−";
+}
+
+.faq-answer {
+  padding: 0 22px 18px;
+  color: var(--muted);
+  font-size: 14.5px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+/* RESORT CARDS (EXACT MATCH TO SCREENSHOTS) */
+.resort-grid-custom {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.resort-card-custom {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  height: 380px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  color: #ffffff;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.resort-card-custom:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+}
+
+.resort-card-custom::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(12, 28, 19, 0.72) 0%, rgba(12, 28, 19, 0.35) 45%, rgba(12, 28, 19, 0.95) 100%);
+  z-index: 1;
+}
+
+.resort-top-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resort-badge-orange {
+  background: #f1a826;
+  color: #17261a;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.resort-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.resort-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.resort-dots span.active {
+  background: #f1a826;
+  width: 14px;
+  border-radius: 10px;
+}
+
+.resort-card-content {
+  position: relative;
+  z-index: 2;
+}
+
+.resort-card-content h3 {
+  font-size: 24px;
+  margin: 0 0 8px;
+  color: #ffffff;
+}
+
+.resort-card-content p {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #e5ece7;
+  margin: 0 0 14px;
+}
+
+.resort-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.resort-tag {
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  color: #ffffff;
+}
+
+.resort-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  padding-top: 12px;
+}
+
+.resort-price-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.resort-price-note {
+  font-size: 11px;
+  color: #c7d5cc;
+}
+
+.resort-price-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #f7ca65;
+}
+
+.resort-btn-enquire {
+  background: #f1a826;
+  color: #1a291f;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+/* SITE FOOTER */
+.site-footer {
+  background: #102c20;
+  color: #e8efe9;
+  padding: 56px 20px 28px;
+}
+
+.footer-grid {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 28px;
+}
+
+.site-footer h3 {
+  color: #f0c76f;
+  font-size: 16px;
+  margin-top: 0;
+}
+
+.site-footer p,
+.site-footer li {
+  font-size: 13.5px;
+  color: #c5d2c8;
+}
+
+.site-footer ul {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.site-footer li {
+  margin-bottom: 6px;
+}
+
+.site-footer a:hover {
+  color: #f0c76f;
+}
+
+.footer-disclosure {
+  max-width: 1160px;
+  margin: 26px auto 0;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  color: #d3ddd5;
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+
+.footer-bottom {
+  max-width: 1160px;
+  margin: 24px auto 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 12px;
+  color: #aebdb2;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* FLOATING WHATSAPP & MOBILE BAR */
+.whatsapp-floating-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #25d366;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 50px;
+  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.45);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.whatsapp-floating-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: #ffffff;
+  flex-shrink: 0;
+}
+
+.mobile-sticky-bar {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .nav-links { gap: 12px; font-size: 12.5px; }
+  .form-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-grid button { grid-column: span 2; }
+  .cards, .timings-grid { grid-template-columns: repeat(2, 1fr); }
+  .feature-inner { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: repeat(2, 1fr); }
+  .resort-grid-custom { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 680px) {
+  body { padding-bottom: 60px; }
+  .topbar-left { display: none; }
+  .topbar-inner { justify-content: center; font-size: 12px; }
+  .menu-toggle { display: block; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    background: var(--white);
+    padding: 12px 20px 20px;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .hero, .slides { min-height: 480px; }
+  .slide-content { padding: 30px 18px 60px; }
+  .cards, .timings-grid { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-grid button { grid-column: auto; }
+  .mobile-sticky-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 60;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--forest);
+  }
+  .mobile-sticky-bar a { text-align: center; padding: 13px 10px; font-weight: 800; font-size: 14px; }
+  .mobile-sticky-call { background: var(--gold); color: #17271d; }
+  .mobile-sticky-wa { background: #102c20; color: #5ce08b; }
+  .whatsapp-floating-btn { bottom: 70px; right: 16px; padding: 11px; border-radius: 50%; }
+  .whatsapp-floating-btn span { display: none; }
+}
+
+/* ==========================================
+   JEEP SAFARI PAGE - MOBILE RESPONSIVE FIX
+   ========================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* PAGE HERO - DESKTOP */
+
+.page-hero {
+    width: 100%;
+    min-height: 380px;
+    display: flex;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.page-hero .container {
+    width: min(1160px, 100%);
+    margin: 0 auto;
+}
+
+/* FORM RESPONSIVE */
+
+.form-wrap {
+    width: 100%;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.form-grid input,
+.form-grid select,
+.form-grid button {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* INTRO SECTION */
+
+.intro-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 35px;
+}
+
+.intro-image {
+    width: 100%;
+    min-height: 350px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* TABLE RESPONSIVE */
+
+.table-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.zone-table {
+    width: 100%;
+    min-width: 750px;
+    border-collapse: collapse;
+}
+
+/* CONTENT CARDS */
+
+.cards,
+.timings-grid,
+.info-boxes {
+    width: 100%;
+    min-width: 0;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.timings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+/* FAQ */
+
+.faq-list,
+.faq-item {
+    width: 100%;
+    min-width: 0;
+}
+
+.faq-item summary {
+    cursor: pointer;
+    line-height: 1.6;
+}
+
+/* FOOTER */
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 25px;
+}
+
+.footer-grid > div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+
+    .intro-grid {
+        gap: 24px;
+    }
+
+    .footer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ==========================================
+   MOBILE - 600px AND BELOW
+========================================== */
+
+@media (max-width: 600px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    /* TOPBAR */
+
+    .topbar-inner {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding: 9px 12px;
+        text-align: center;
+    }
+
+    .topbar-left {
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .topbar-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        font-size: 11px;
+    }
+
+    /* PAGE HERO IMAGE - NO CROP */
+
+    .page-hero {
+        width: 100%;
+        min-height: 250px;
+        height: auto;
+        padding: 25px 0 22px;
+
+        background-size: 100% auto;
+        background-position: center top;
+        background-repeat: no-repeat;
+        background-color: #173d2b;
+
+        display: flex;
+        align-items: center;
+    }
+
+    .page-hero .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .page-hero .eyebrow {
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+
+    .page-hero h1 {
+        font-size: 28px;
+        line-height: 1.2;
+        margin: 9px 0;
+    }
+
+    .page-hero p {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    /* ENQUIRY FORM */
+
+    .enquiry {
+        padding: 25px 14px;
+    }
+
+    .form-wrap {
+        padding: 0;
+        width: 100%;
+    }
+
+    .form-title h2 {
+        font-size: 21px;
+        line-height: 1.3;
+    }
+
+    .form-subtitle {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .form-grid input,
+    .form-grid select {
+        min-height: 46px;
+        font-size: 16px;
+        padding: 11px 12px;
+    }
+
+    .form-grid button {
+        min-height: 46px;
+        font-size: 15px;
+    }
+
+    .form-note {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    /* INTRO SECTION */
+
+    .intro-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .intro-image {
+        min-height: 220px;
+        width: 100%;
+        background-size: contain;
+        background-position: center;
+        background-color: #f1f4f0;
+    }
+
+    .intro-copy h2 {
+        font-size: 24px;
+        line-height: 1.3;
+    }
+
+    .intro-copy p {
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .info-boxes {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* ALL SECTIONS */
+
+    .section {
+        padding: 38px 0;
+    }
+
+    .section-head {
+        margin-bottom: 22px;
+    }
+
+    .section-head h2 {
+        font-size: 24px;
+        line-height: 1.3;
+    }
+
+    .section-head p {
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    /* ZONE DESCRIPTIONS */
+
+    .zone-descriptions h3 {
+        font-size: 18px;
+        line-height: 1.4;
+    }
+
+    .zone-descriptions p {
+        font-size: 13px;
+        line-height: 1.75;
+    }
+
+    /* TABLE */
+
+    .table-wrap {
+        overflow-x: auto;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .zone-table {
+        min-width: 750px;
+        font-size: 12px;
+    }
+
+    .zone-table th,
+    .zone-table td {
+        padding: 10px;
+    }
+
+    /* TIMINGS AND CARDS */
+
+    .cards,
+    .timings-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 15px;
+    }
+
+    .card,
+    .timing-card {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* NOTICES */
+
+    .notice,
+    .disclosure {
+        padding: 14px !important;
+        font-size: 13px;
+        line-height: 1.7;
+        overflow-wrap: anywhere;
+    }
+
+    /* FAQ */
+
+    .faq-item summary {
+        font-size: 14px;
+        padding: 13px 10px;
+    }
+
+    .faq-answer {
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    /* FOOTER */
+
+    .footer-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 25px;
+        padding: 30px 18px;
+    }
+
+    .footer-grid p,
+    .footer-grid li {
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .footer-bottom {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding: 18px 12px;
+        font-size: 11px;
+    }
+
+    .footer-disclosure {
+        padding: 15px;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    /* SUCCESS POPUP */
+
+    .jeep-web3-dialog {
+        width: 100%;
+        max-width: 400px;
+        padding: 25px 18px;
+    }
+
+    /* PREVENT HORIZONTAL OVERFLOW */
+
+    .section,
+    .container,
+    .intro-grid,
+    .cards,
+    .timings-grid {
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+/* SMALL PHONES - 250px TO 375px */
+
+@media (max-width: 375px) {
+
+    .page-hero {
+        min-height: 250px;
+        padding-top: 20px;
+    }
+
+    .page-hero h1 {
+        font-size: 24px;
+    }
+
+    .page-hero p {
+        font-size: 12px;
+    }
+
+    .section-head h2 {
+        font-size: 21px;
+    }
+
+    .form-title h2 {
+        font-size: 19px;
+    }
+
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+
+/* =========================================
+   JEEP SAFARI PRICE TABLE - MOBILE CARDS
+========================================= */
+
+@media (max-width: 600px) {
+
+    #charges .table-wrap {
+        width: 100%;
+        max-width: 100%;
+        overflow: visible;
+        padding: 0;
+    }
+
+    #charges .zone-table {
+        display: block;
+        width: 100%;
+        min-width: 0 !important;
+        border: 0;
+        font-size: 13px;
+    }
+
+    #charges .zone-table thead {
+        display: none;
+    }
+
+    #charges .zone-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    /* Each Safari Zone becomes a card */
+
+    #charges .zone-table tbody tr {
+        display: block;
+        width: 100%;
+        margin-bottom: 16px;
+        padding: 12px;
+        background: #ffffff;
+        border: 1px solid #e1e9e3;
+        border-radius: 10px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    }
+
+    #charges .zone-table tbody td {
+        display: grid;
+        grid-template-columns: 105px minmax(0, 1fr);
+        gap: 8px;
+        width: 100%;
+        padding: 10px 0;
+        border: 0;
+        border-bottom: 1px solid #edf0ed;
+        text-align: left;
+        font-size: 12px;
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+        color: #344238;
+    }
+
+    #charges .zone-table tbody td:last-child {
+        border-bottom: 0;
+    }
+
+    /* Labels */
+
+    #charges .zone-table tbody td:nth-child(1)::before {
+        content: "Safari Zone";
+    }
+
+    #charges .zone-table tbody td:nth-child(2)::before {
+        content: "Indian Price";
+    }
+
+    #charges .zone-table tbody td:nth-child(3)::before {
+        content: "Foreign Price";
+    }
+
+    #charges .zone-table tbody td:nth-child(4)::before {
+        content: "Inclusions";
+    }
+
+    #charges .zone-table tbody td:nth-child(5)::before {
+        content: "Guide Fee";
+    }
+
+    #charges .zone-table tbody td::before {
+        font-weight: 750;
+        color: #173d2b;
+        font-size: 11px;
+    }
+
+    /* Safari Zone name */
+
+    #charges .zone-table tbody td:first-child {
+        display: block;
+        padding: 0 0 10px;
+        margin-bottom: 5px;
+        font-size: 15px;
+        font-weight: 800;
+        color: #173d2b;
+    }
+
+    #charges .zone-table tbody td:first-child::before {
+        display: none;
+    }
+
+    #charges .zone-table tbody td:first-child strong {
+        font-size: 15px;
+    }
+
+}
+
+/* Extra small phones */
+
+@media (max-width: 320px) {
+
+    #charges .zone-table tbody td {
+        grid-template-columns: 88px minmax(0, 1fr);
+        gap: 5px;
+        font-size: 11px;
+    }
+
+    #charges .zone-table tbody tr {
+        padding: 10px;
+    }
+
+}
+
+/* =========================================
+   GLOBAL FORM SUBMIT BUTTON
+   ========================================= */
+
+.form-grid button[type="submit"] {
+    min-height: 46px;
+    padding: 11px 18px;
+    background: var(--gold) !important;
+    color: var(--forest) !important;
+    border: 1px solid var(--gold) !important;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: none;
+}
+
+.form-grid button[type="submit"]:hover {
+    background: #e7bd69 !important;
+    border-color: #e7bd69 !important;
+}
+
+.form-grid button[type="submit"]:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+/* JEEP SAFARI ENQUIRY FORM */
+@media (min-width: 992px) {
+    #enquiry .form-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1.2fr) 145px;
+        gap: 12px;
+        align-items: center;
+    }
+
+    #enquiry .form-grid input,
+    #enquiry .form-grid select,
+    #enquiry .form-grid button {
+        width: 100%;
+        min-width: 0;
+        height: 46px;
+        margin: 0;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 991px) {
+    #enquiry .form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #enquiry #jeepSafariWeb3Submit {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 600px) {
+    #enquiry .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    #enquiry .form-grid input,
+    #enquiry .form-grid select,
+    #enquiry #jeepSafariWeb3Submit {
+        width: 100%;
+        min-height: 46px;
+    }
+}
+
+
+
+/* =========================================================
+   FINAL RESPONSIVE FIXES — MOBILE TABLES + DESKTOP ENQUIRY
+   Append after all existing CSS so these rules take priority.
+   ========================================================= */
+
+/* Desktop: keep all four fields and the submit button visible */
+@media (min-width: 961px) {
+  #enquiry .form-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(150px, 0.85fr) !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  #enquiry .form-grid input,
+  #enquiry .form-grid select,
+  #enquiry .form-grid button,
+  #enquiry .form-grid .btn {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 46px !important;
+    min-height: 46px !important;
+    margin: 0 !important;
+    padding: 0 12px !important;
+    line-height: 1.2 !important;
+  }
+
+  #enquiry .form-grid button,
+  #enquiry .form-grid .btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    background: var(--gold, #d7a84b) !important;
+    color: #173d2b !important;
+    border: 0 !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+  }
+}
+
+/* Tablet: prevent the submit button from being squeezed */
+@media (min-width: 681px) and (max-width: 960px) {
+  #enquiry .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  #enquiry .form-grid button,
+  #enquiry .form-grid .btn {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    min-height: 46px !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+/* Mobile: readable tables without horizontal scroll.
+   The Jeep charges table keeps its existing card layout. */
+@media (max-width: 680px) {
+  .table-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  .zone-table:not(#charges .zone-table) {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    font-size: 11.5px !important;
+  }
+
+  .zone-table:not(#charges .zone-table) th,
+  .zone-table:not(#charges .zone-table) td {
+    min-width: 0 !important;
+    padding: 9px 7px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    vertical-align: top !important;
+    line-height: 1.45 !important;
+  }
+
+  .zone-table:not(#charges .zone-table) th {
+    font-size: 10.5px !important;
+    letter-spacing: 0.2px !important;
+  }
+
+  /* Keep nested content from forcing the page wider */
+  .table-wrap *,
+  .zone-table * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .zone-table img {
+    height: auto;
+  }
+
+  /* Prevent resort/zone information cards from exceeding viewport */
+  .resort-grid-custom,
+  .zone-descriptions,
+  .zone-descriptions > *,
+  .resort-card,
+  .resort-item,
+  .feature-inner,
+  .feature-inner > * {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .zone-descriptions,
+  .resort-grid-custom {
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  #enquiry .form-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  #enquiry .form-grid button,
+  #enquiry .form-grid .btn {
+    width: 100% !important;
+    min-height: 46px !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+
+
+/* =========================================================
+   RESORT STAY — MOBILE TARIFF TABLE AS STACKED CARDS
+   Targets only #tariff, so other page tables are unaffected.
+   ========================================================= */
+@media (max-width: 600px) {
+  #tariff .table-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  #tariff .zone-table {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    table-layout: auto !important;
+    border: 0 !important;
+    border-collapse: separate !important;
+    font-size: 13px !important;
+  }
+
+  #tariff .zone-table thead {
+    display: none !important;
+  }
+
+  #tariff .zone-table tbody {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  #tariff .zone-table tbody tr {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 0 14px !important;
+    padding: 12px 14px !important;
+    background: #fff !important;
+    border: 1px solid #e1e9e3 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06) !important;
+  }
+
+  #tariff .zone-table tbody td {
+    display: grid !important;
+    grid-template-columns: minmax(95px, 36%) minmax(0, 1fr) !important;
+    align-items: start !important;
+    gap: 9px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 9px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid #edf0ed !important;
+    background: transparent !important;
+    text-align: left !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    color: #344238 !important;
+  }
+
+  #tariff .zone-table tbody td::before {
+    display: block !important;
+    font-weight: 800 !important;
+    font-size: 11px !important;
+    line-height: 1.45 !important;
+    color: #173d2b !important;
+  }
+
+  #tariff .zone-table tbody td:nth-child(1)::before {
+    content: "Resort Category";
+  }
+
+  #tariff .zone-table tbody td:nth-child(2)::before {
+    content: "Estimated Tariff";
+  }
+
+  #tariff .zone-table tbody td:nth-child(3)::before {
+    content: "Popular Meal Plan";
+  }
+
+  #tariff .zone-table tbody td:nth-child(4)::before {
+    content: "Key Inclusions";
+  }
+
+  #tariff .zone-table tbody td:nth-child(5)::before {
+    content: "Safari Add-On";
+  }
+
+  #tariff .zone-table tbody td:first-child {
+    display: block !important;
+    padding-top: 2px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    color: #173d2b !important;
+  }
+
+  #tariff .zone-table tbody td:first-child::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  #tariff .zone-table tbody td:last-child {
+    border-bottom: 0 !important;
+    padding-bottom: 2px !important;
+  }
+}
+
+/* JEEP BOOKING PRICE BREAKDOWN */
+
+.jeep-booking-prices {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    width: 100%;
+}
+
+.jeep-price-card {
+    background: #fff;
+    border: 1px solid #dce6df;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 18px rgba(23, 61, 43, 0.07);
+}
+
+.jeep-price-title {
+    background: #173d2b;
+    color: #fff;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 800;
+    border-bottom: 3px solid #d7a84b;
+}
+
+.jeep-price-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.jeep-price-table td {
+    padding: 13px 12px;
+    border-bottom: 1px solid #e1e8e3;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.jeep-price-table td:first-child {
+    width: 62%;
+}
+
+.jeep-price-table td:last-child {
+    color: #173d2b;
+    font-weight: 650;
+}
+
+.jeep-price-table .jeep-price-total td {
+    background: #f0f4f1;
+    font-weight: 850;
+    font-size: 15px;
+    color: #173d2b;
+    border-bottom: 0;
+}
+
+.jeep-price-total td:last-child {
+    color: #173d2b;
+}
+
+.jeep-price-table .not-included {
+    color: #bd4545;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.jeep-price-table .included {
+    color: #23834d;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* MOBILE */
+@media (max-width: 680px) {
+    .jeep-booking-prices {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .jeep-price-title {
+        font-size: 15px;
+    }
+
+    .jeep-price-table td {
+        padding: 12px 10px;
+        font-size: 12px;
+    }
+}
+
+/* =========================================
+   HOME PAGE — SAFARI ZONES MOBILE CARDS
+========================================= */
+
+@media (max-width: 600px) {
+
+    #zones .table-wrap {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+    }
+
+    #zones .zone-table {
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        border: 0 !important;
+        border-collapse: separate !important;
+        table-layout: auto !important;
+    }
+
+    #zones .zone-table thead {
+        display: none !important;
+    }
+
+    #zones .zone-table tbody {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    /* Individual zone card */
+    #zones .zone-table tbody tr {
+        display: block !important;
+        width: 100% !important;
+        margin-bottom: 15px !important;
+        padding: 13px 14px !important;
+        background: #ffffff !important;
+        border: 1px solid #dfe8e1 !important;
+        border-radius: 11px !important;
+        box-shadow: 0 4px 14px rgba(23, 61, 43, 0.07) !important;
+    }
+
+    /* Each information row */
+    #zones .zone-table tbody td {
+        display: grid !important;
+        grid-template-columns: 112px minmax(0, 1fr) !important;
+        gap: 9px !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: 9px 0 !important;
+        border: 0 !important;
+        border-bottom: 1px solid #edf1ed !important;
+        background: transparent !important;
+        text-align: left !important;
+        font-size: 12px !important;
+        line-height: 1.5 !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    /* Field labels */
+    #zones .zone-table tbody td::before {
+        font-size: 10px !important;
+        font-weight: 800 !important;
+        color: #173d2b !important;
+        text-transform: uppercase;
+        letter-spacing: 0.25px;
+    }
+
+    #zones .zone-table tbody td:nth-child(1)::before {
+        content: "Safari Zone";
+    }
+
+    #zones .zone-table tbody td:nth-child(2)::before {
+        content: "Entry Gate";
+    }
+
+    #zones .zone-table tbody td:nth-child(3)::before {
+        content: "Safari Mode";
+    }
+
+    #zones .zone-table tbody td:nth-child(4)::before {
+        content: "Landscape & Wildlife";
+    }
+
+    #zones .zone-table tbody td:nth-child(5)::before {
+        content: "Open Season";
+    }
+
+    /* Zone name as card heading */
+    #zones .zone-table tbody td:first-child {
+        display: block !important;
+        padding: 0 0 11px !important;
+        margin-bottom: 3px !important;
+        border-bottom: 2px solid #d7a84b !important;
+        font-size: 15px !important;
+        font-weight: 850 !important;
+        color: #173d2b !important;
+    }
+
+    #zones .zone-table tbody td:first-child::before {
+        display: none !important;
+        content: none !important;
+    }
+
+    #zones .zone-table tbody td:last-child {
+        border-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    #zones .zone-table tbody td strong {
+        color: #173d2b !important;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+    #zones .zone-table tbody td {
+        grid-template-columns: 96px minmax(0, 1fr) !important;
+        gap: 6px !important;
+        font-size: 11px !important;
+    }
+}
+
+
+/* HOME PAGE — SAFARI ZONES TABLE TO MOBILE CARDS */
+@media (max-width: 680px) {
+  #safari-zones .table-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+  #safari-zones .zone-table {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    border: 0 !important;
+    border-collapse: separate !important;
+    table-layout: auto !important;
+    font-size: 12px !important;
+  }
+  #safari-zones .zone-table thead { display: none !important; }
+  #safari-zones .zone-table tbody {
+    display: block !important;
+    width: 100% !important;
+  }
+  #safari-zones .zone-table tbody tr {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 0 14px !important;
+    padding: 12px 14px !important;
+    background: #fff !important;
+    border: 1px solid var(--line, #e2e8e4) !important;
+    border-radius: 11px !important;
+    box-shadow: 0 5px 16px rgba(17, 43, 29, .08) !important;
+  }
+  #safari-zones .zone-table tbody td {
+    display: grid !important;
+    grid-template-columns: 108px minmax(0, 1fr) !important;
+    align-items: start !important;
+    gap: 9px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 9px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid #edf1ed !important;
+    background: transparent !important;
+    text-align: left !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
+  #safari-zones .zone-table tbody td::before {
+    display: block !important;
+    color: var(--forest, #173d2b) !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    line-height: 1.4 !important;
+    text-transform: uppercase !important;
+    letter-spacing: .25px !important;
+  }
+  #safari-zones .zone-table tbody td:nth-child(1)::before { content: "Safari Zone"; }
+  #safari-zones .zone-table tbody td:nth-child(2)::before { content: "Entry Gate"; }
+  #safari-zones .zone-table tbody td:nth-child(3)::before { content: "Safari Mode"; }
+  #safari-zones .zone-table tbody td:nth-child(4)::before { content: "Landscape & Wildlife"; }
+  #safari-zones .zone-table tbody td:nth-child(5)::before { content: "Open Season"; }
+  #safari-zones .zone-table tbody td:first-child {
+    display: block !important;
+    padding: 0 0 10px !important;
+    margin: 0 0 3px !important;
+    border-bottom: 2px solid var(--gold, #d7a84b) !important;
+    color: var(--forest, #173d2b) !important;
+    font-size: 15px !important;
+    font-weight: 850 !important;
+  }
+  #safari-zones .zone-table tbody td:first-child::before {
+    display: none !important;
+    content: none !important;
+  }
+  #safari-zones .zone-table tbody td:last-child {
+    border-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  #safari-zones .zone-table .zone-badge {
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+}
+@media (max-width: 360px) {
+  #safari-zones .zone-table tbody td {
+    grid-template-columns: 94px minmax(0, 1fr) !important;
+    gap: 7px !important;
+    font-size: 11px !important;
+  }
+}
