@@ -3,6 +3,17 @@
    Fixed: Safe Active Nav, Resilient Slider & FormSubmit AJAX Handler
    ========================================================================== */
 
+// Reports a Google Ads conversion only after an enquiry was actually submitted.
+function acsReportConversion() {
+  if (typeof gtag === 'function') {
+    gtag('event', 'conversion', {
+      send_to: 'AW-18551133495/cM0RCI-6rrAdELeq741F',
+      value: 1.0,
+      currency: 'INR'
+    });
+  }
+}
+
 const SITE_CONFIG = {
   email: 'adventuresafari120@gmail.com',
   phone: '+91-9520645743',
@@ -116,8 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (response.ok) {
           form.reset();
+          acsReportConversion();
           if (feedback) {
-            feedback.innerHTML = `✅ <strong>Shukriya, ${dataObj.name || 'Traveller'}!</strong> Aapki query local travel desk par receive ho gayi hai. Ham jaldi hi aapse <strong>${dataObj.phone}</strong> par contact karenge.`;
+            feedback.innerHTML = `✅ <strong>Thank you, ${dataObj.name || 'Traveller'}!</strong> Your enquiry has been received by our local travel desk. We will contact you on <strong>${dataObj.phone}</strong> shortly.`;
             feedback.style.display = 'block';
             feedback.style.background = 'rgba(37, 211, 102, 0.2)';
             feedback.style.border = '1px solid #25d366';
@@ -130,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Safe Fallback to WhatsApp chat if endpoint fails
         if (feedback) {
           const waMsg = encodeURIComponent(`Hello, my name is ${dataObj.name}. I want to enquire about ${dataObj.interest}. Phone: ${dataObj.phone}`);
-          feedback.innerHTML = `⚠️ Form submit karne me problem hui. Instant connect karne ke liye: <a href="https://wa.me/${SITE_CONFIG.whatsappPhone}?text=${waMsg}" target="_blank" style="text-decoration:underline; font-weight:bold; color:#0b421d;">Yahan WhatsApp par bhejein →</a>`;
+          feedback.innerHTML = `⚠️ We could not submit the form. To connect instantly, please use: <a href="https://wa.me/${SITE_CONFIG.whatsappPhone}?text=${waMsg}" target="_blank" style="text-decoration:underline; font-weight:bold; color:#0b421d;">WhatsApp us →</a>`;
           feedback.style.display = 'block';
           feedback.style.background = '#fff3cd';
           feedback.style.border = '1px solid #ffeeba';
@@ -163,4 +175,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(waLink);
   }
 
+});
+
+// Ensure every enquiry form note links to the Privacy Policy.
+document.querySelectorAll('.form-note').forEach((note) => {
+  if (!note.querySelector('a[href*="privacy-policy"]')) {
+    note.insertAdjacentHTML('beforeend', ' <a href="privacy-policy.html" style="text-decoration:underline">Privacy Policy</a>');
+  }
 });
