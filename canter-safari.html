@@ -12,15 +12,6 @@
   gtag('config', 'AW-18551133495');
 </script>
 
-  <!-- Event snippet for Page view conversion page -->
-<script>
-  gtag('event', 'conversion', {
-      'send_to': 'AW-18551133495/cM0RCI-6rrAdELeq741F',
-      'value': 1.0,
-      'currency': 'INR'
-  });
-</script>
-
 
 
   
@@ -173,7 +164,7 @@
     <div class="container">
       <span class="eyebrow">Dhikala Tourism Zone • 16-Seater Safari Bus</span>
       <h1>Dhikala Canter Safari</h1>
-      <p>Journey deep into the core grasslands and Ramganga riverbeds of Dhikala. The only official way for day visitors to explore Jim Corbett’s most famous wildlife zone.</p>
+      <p>Journey deep into the core grasslands and Ramganga riverbeds of Dhikala. A Canter ride for day visitors to explore Jim Corbett’s famous Dhikala zone, as per Forest Department rules.</p>
     </div>
   </section>
 
@@ -204,7 +195,7 @@
         <p id="canterSafariWeb3Error" class="jeep-web3-error" role="alert" aria-live="assertive" hidden></p>
 
         <p class="form-note">
-          Submitting dispatches your inquiry securely to our local team. No online payment or personal ID copies are requested through this website.
+          Your enquiry is sent to our local team through a third-party form service (see our <a href="privacy-policy.html">Privacy Policy</a>). No online payment or personal ID copies are requested through this website.
         </p>
       </div>
     </section>
@@ -220,7 +211,7 @@
         <span class="eyebrow">The Golden Gateway to Dhikala</span>
         <h2>Why Canter Safari is Unique in Jim Corbett</h2>
         <p>
-          <strong>Dhikala</strong> is internationally acclaimed as the jewel of Corbett Tiger Reserve. With its sweeping Savannah grasslands (<em>Chaurs</em>), Ramganga river channels, and backdrop of the Shivalik foothills, it boasts the densest concentration of Royal Bengal Tigers, wild elephant herds, gharials, and hog deer.
+          <strong>Dhikala</strong> is one of the best-known zones of Corbett Tiger Reserve. With its sweeping Savannah grasslands (<em>Chaurs</em>), Ramganga river channels, and backdrop of the Shivalik foothills, it is known for Royal Bengal Tigers, wild elephant herds, gharials, and hog deer.
         </p>
         <p>
           Because private 4x4 Gypsies are strictly restricted to overnight Forest Rest House (FRH) residents inside Dhikala, the <strong>16-seater open Canter Safari</strong> is the <strong>exclusive official medium for day tourists</strong> staying in external private resorts around Ramnagar to enter and experience the heart of Dhikala.
@@ -261,8 +252,8 @@
     <table class="jeep-price-table">
       <tbody>
         <tr>
-          <td>Official Canter Tariff (Govt. Reference Rate)</td>
-          <td>₹1,900 <span class="not-included">(Official Portal Rate)</span></td>
+          <td>Canter Entry Tariff (as listed on corbettgov.org)</td>
+          <td>₹1,900 <span class="not-included">(Reference rate; verify on corbettgov.org)</span></td>
         </tr>
         <tr>
           <td>16-Seater Canter Excursion Seat</td>
@@ -291,8 +282,8 @@
     <table class="jeep-price-table">
       <tbody>
         <tr>
-          <td>Official Canter Tariff (Govt. Reference Rate)</td>
-          <td>₹3,900 <span class="not-included">(Official Portal Rate)</span></td>
+          <td>Canter Entry Tariff (as listed on corbettgov.org)</td>
+          <td>₹3,900 <span class="not-included">(Reference rate; verify on corbettgov.org)</span></td>
         </tr>
         <tr>
           <td>16-Seater Canter Excursion Seat</td>
@@ -634,6 +625,7 @@
         }
 
         form.reset();
+        if (typeof acsReportConversion === 'function') { acsReportConversion(); }
         openSuccessPopup(phone, email);
       } catch (error) {
         showError(error.message || "Unable to send your enquiry. Please check your internet connection and try again.");
