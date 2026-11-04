@@ -12,23 +12,14 @@
   gtag('config', 'AW-18551133495');
 </script>
 
-<!-- Event snippet for Page view conversion page -->
-<script>
-  gtag('event', 'conversion', {
-      'send_to': 'AW-18551133495/cM0RCI-6rrAdELeq741F',
-      'value': 1.0,
-      'currency': 'INR'
-  });
-</script>
-
   
   
 
   
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Best Resorts in Jim Corbett, Ramnagar | Riverside &amp; Forest Stays | Adventure Corbett</title>
-  <meta name="description" content="Discover handpicked luxury, riverside, and forest-view resorts around Jim Corbett National Park in Ramnagar, Dhikuli, Kyari &amp; Marchula. Swimming pools, family suites, safari pickup &amp; custom meal plans. Note: Safari guide fee is payable directly by the client.">
+  <title>Resorts in Jim Corbett, Ramnagar | Riverside &amp; Forest Stays | Adventure Corbett</title>
+  <meta name="description" content="Discover luxury, riverside, and forest-view resorts around Jim Corbett National Park in Ramnagar, Dhikuli, Kyari &amp; Marchula. Swimming pools, family suites, safari pickup &amp; custom meal plans. Note: Safari guide fee is payable directly by the client.">
   <meta name="keywords" content="Resorts in Jim Corbett, Best Resorts in Ramnagar, Riverside Resorts in Jim Corbett, Luxury Resorts near Corbett National Park, Dhikuli Resorts Jim Corbett, Corbett Family Resort Packages, Jim Corbett Resort with Swimming Pool, Kyari Forest Resorts">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#173d2b">
@@ -38,7 +29,7 @@
 
   <!-- Open Graph Meta Tags -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Best Resorts in Jim Corbett, Ramnagar | Adventure Corbett Safari">
+  <meta property="og:title" content="Resorts in Jim Corbett, Ramnagar | Adventure Corbett Safari">
   <meta property="og:description" content="Explore top riverside and forest-edge resorts in Dhikuli, Kyari, and Ramnagar with swimming pools, multi-cuisine dining, and doorstep safari Gypsy pickup.">
   <meta property="og:url" content="https://adventurecorbettsafari.com/resort-stay.html">
   <meta property="og:image" content="https://adventurecorbettsafari.com/assets/maya/maya-1.jpeg">
@@ -372,7 +363,7 @@
         <p class="web3-resort-error" id="resortFormError" role="alert" aria-live="assertive" hidden></p>
 
         <p class="form-note">
-          Submitting dispatches your inquiry securely to our local team. We coordinate private resort enquiries and door-to-door safari transfers based on seasonal availability.
+          Your enquiry is sent to our local team through a third-party form service (see our <a href="privacy-policy.html">Privacy Policy</a>). We coordinate private resort enquiries and door-to-door safari transfers based on seasonal availability.
         </p>
       </div>
     </section>
@@ -382,7 +373,7 @@
   <section class="section zigzag-section" id="featured-resorts">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow">Handpicked Forest &amp; River Stays</span>
+        <span class="eyebrow">Forest &amp; River Stays</span>
         <h2>Explore Resorts Around Jim Corbett</h2>
         <p>Compare six selected stays, browse their photos and send an enquiry for your preferred resort. Independent stay &amp; doorstep safari transfer coordination.</p>
       </div>
@@ -703,9 +694,9 @@
 
       <div class="faq-list">
         <details class="faq-item" open>
-          <summary>1. Is non-vegetarian food and alcohol allowed in private resorts in Jim Corbett?</summary>
+          <summary>1. What are the dining arrangements at private resorts in Jim Corbett?</summary>
           <div class="faq-answer">
-            <strong>Yes.</strong> While non-vegetarian food and alcohol are strictly banned inside government Forest Rest Houses (like Dhikala and Bijrani FRH), private resorts in Ramnagar, Dhikuli, Kyari, and Marchula serve delicious non-vegetarian buffet dishes and have bar licenses or permit guests to enjoy drinks inside designated areas.
+            <strong>It depends on the property.</strong> While non-vegetarian food and alcohol are strictly banned inside government Forest Rest Houses (like Dhikala and Bijrani FRH), private resorts in Ramnagar, Dhikuli, Kyari, and Marchula offer their own food and dining arrangements, which vary by property. Please confirm details with the property before booking.
           </div>
         </details>
 
@@ -733,7 +724,7 @@
         <details class="faq-item">
           <summary>5. Can we host destination weddings or corporate offsites in Corbett?</summary>
           <div class="faq-answer">
-            <strong>Yes, Corbett is one of North India’s top destinations for weddings and corporate conferences.</strong> Several luxury properties in Dhikuli and Ramnagar offer 200+ room capacities, massive banquet halls, manicured riverfront lawns, and audio-visual setups for 500+ guests. Contact our desk for group rates.
+            <strong>Several properties near Corbett host weddings and corporate groups.</strong> Several luxury properties in Dhikuli and Ramnagar offer 200+ room capacities, massive banquet halls, manicured riverfront lawns, and audio-visual setups for 500+ guests. Contact our desk for group rates.
           </div>
         </details>
       </div>
@@ -979,6 +970,7 @@
           modal.hidden = false;
           document.body.style.overflow = "hidden";
           closeButton.focus();
+          if (typeof acsReportConversion === 'function') { acsReportConversion(); }
           form.reset();
           selectedResortInput.value = "General Resort Enquiry";
         } catch (error) {
