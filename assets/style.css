@@ -2367,7 +2367,7 @@ img {
 
 /* Moving legal / business-status disclaimer */
 .site-header::before {
-  content: "NOTICE: We are an independent private tour operator. We are not registered with the Forest Department as an authorised safari booking agency, and we are not a Government department or its representative. Safari permits are issued by the concerned authorities and remain subject to availability.";
+  content: "NOTICE: We are an private tour operator. Our package charges cover private Gypsy rental, authorized driver and local trip coordination only.";
   display: block;
   width: 100%;
   min-height: 30px;
