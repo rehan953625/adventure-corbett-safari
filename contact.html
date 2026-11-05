@@ -155,46 +155,34 @@
         </div>
       </div>
 
-      <!-- Main Detailed Enquiry Form -->
-      <div class="content-panel form-page" style="margin-top: 36px; border-radius: var(--radius); padding: 32px 28px;">
-        <div style="text-align: center; max-width: 580px; margin: 0 auto 24px;">
-          <h2 style="color: var(--forest); margin: 0 0 8px;">Send a Travel Enquiry</h2>
-          <p style="color: var(--muted); font-size: 14.5px; margin: 0;">
-            Fill in your trip details below. Your enquiry is sent to our local desk through a third-party form service. We do not collect payment details. See our <a href="privacy-policy.html">Privacy Policy</a>.
-          </p>
+      <div id="enquiry">
+    <section class="enquiry" aria-label="Quick Travel Consultation">
+      <div class="form-wrap">
+        <div class="form-title">
+          <div>
+            <h2>Plan Your Corbett Wildlife Journey</h2>
+            <div class="form-subtitle">Need guidance on best zones, seasons, or stay options? Share your query with our local travel desk.</div>
+          </div>
         </div>
 
-        <form data-enquiry-form style="display: grid; gap: 14px;">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <input name="name" placeholder="Full name *" aria-label="Full name" required style="padding: 13px; border: 1px solid #d9e1da; border-radius: 6px; font-size: 14px;">
-            <input name="phone" type="tel" placeholder="Mobile / WhatsApp number *" aria-label="Mobile number" required style="padding: 13px; border: 1px solid #d9e1da; border-radius: 6px; font-size: 14px;">
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <input name="email" type="email" placeholder="Email address *" aria-label="Email address" required style="padding: 13px; border: 1px solid #d9e1da; border-radius: 6px; font-size: 14px;">
-            <select name="interest" aria-label="Primary interest" style="padding: 13px; border: 1px solid #d9e1da; border-radius: 6px; font-size: 14px; background: white;">
-              <option value="Jeep Safari (4x4 Gypsy)">Jeep Safari (4x4 Gypsy)</option>
-              <option value="Dhikala Canter Safari">Dhikala Canter Safari</option>
-              <option value="Dhikala Forest Rest House Stay">Dhikala Forest Rest House Stay</option>
-              <option value="Private Resort Stay Booking">Private Resort Stay Booking</option>
-              <option value="Safari + Resort Combo Package">Safari + Resort Combo Package</option>
-              <option value="General Travel Enquiry">General Travel Enquiry</option>
-            </select>
-          </div>
-
-          <textarea name="message" placeholder="Please mention your tentative travel dates, group size (adults / children), and preferred safari zones..." aria-label="Message" style="min-height: 120px; padding: 13px; border: 1px solid #d9e1da; border-radius: 6px; font: inherit; font-size: 14px;"></textarea>
-
-          <button class="btn" type="submit" style="padding: 14px; font-size: 15px; width: 100%;">Send Travel Enquiry Now</button>
+        <form class="form-grid" data-enquiry-form>
+          <input name="name" placeholder="Your full name" aria-label="Your full name" required>
+          <input name="phone" placeholder="Mobile / WhatsApp number" aria-label="Mobile number" type="tel" required>
+          <input name="email" placeholder="Email address" aria-label="Email address" type="email" required>
+          <select name="interest" aria-label="Select your interest">
+            <option value="Corbett Wildlife Trip Planning" selected>Corbett Wildlife Trip Planning</option>
+            <option value="Jeep Safari Enquiry">Jeep Safari Enquiry</option>
+            <option value="Canter Safari Enquiry">Canter Safari Enquiry</option>
+            <option value="Dhikala Night Stay Consultation">Dhikala Night Stay Consultation</option>
+            <option value="Resort Stay Assistance">Resort Stay Assistance</option>
+          </select>
+          <button class="btn" type="submit">Send Enquiry</button>
         </form>
 
         <div class="form-feedback" role="status" aria-live="polite"></div>
-
-        <p class="small" style="margin-top: 15px; text-align: center;">
-          🔒 Your privacy matters. No financial data, passwords, or identity documents are collected or stored through this website.
-        </p>
+        <p class="form-note">Your enquiry will be sent directly to our local desk. We do not collect payment details. See our <a href="privacy-policy.html">Privacy Policy</a>.</p>
       </div>
-    </div>
-  </section>
+    </section>
 
   <!-- ====================================================================
        GLOBAL FOOTER (Identical on ALL Pages)
